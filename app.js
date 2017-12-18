@@ -8,7 +8,13 @@ app.use(bodyParser.json());
 app.get('/', function (req, res) {
   res.send('UP')
 })
-app.post("/getall",function(req,res){
-    res.send(req.body);
+app.get("/getall",function(req,res){
+     if(req.headers["x-api-key"] === "somekey")
+    res.send({"error":false,"result":"Wow"});
+    else
+    res.send({
+        "error":true,
+        "message":"Invalid Key"
+    })
 })
 app.listen(process.env.PORT, () => console.log('Example app listening on port '+ process.env.PORT))

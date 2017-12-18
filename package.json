@@ -1,0 +1,19 @@
+{
+  "name": "mydiarybackend",
+  "version": "1.0.0",
+  "description": "A Personal Learning Project for kotin and react this is the backend for those",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shubham399/mydiarybackend.git"
+  },
+  "author": "Shubham Kumar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shubham399/mydiarybackend/issues"
+  },
+  "homepage": "https://github.com/shubham399/mydiarybackend#readme"
+}

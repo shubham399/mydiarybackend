@@ -5,4 +5,4 @@ var app = express()
 app.get('/', function (req, res) {
   res.send('hello world')
 })
-app.listen(process.env.IP, () => console.log('Example app listening on port'+  process.env.IP))
+app.listen(8080, () => console.log('Example app listening on port '+ 8080))

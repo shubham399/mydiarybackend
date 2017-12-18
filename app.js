@@ -5,7 +5,7 @@ var app = express()
 app.get('/', function (req, res) {
   res.send('UP')
 })
-app.get("/getall",function(req,res){
-    res.send(req)
+app.post("/getall",function(req,res){
+    res.send(req);
 })
 app.listen(process.env.PORT, () => console.log('Example app listening on port '+ process.env.PORT))

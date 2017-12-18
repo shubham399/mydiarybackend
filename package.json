@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/shubham399/mydiarybackend/issues"
   },
-  "homepage": "https://github.com/shubham399/mydiarybackend#readme"
+  "homepage": "https://github.com/shubham399/mydiarybackend#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }

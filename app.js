@@ -3,6 +3,8 @@ var app = express()
 var bodyParser = require('body-parser');
 var redis = require("redis");
 const diaryRouter = require("./routes/diary")
+var helmet = require('helmet')
+app.use(helmet())
 // const redisurl =process.env.REDIS_URL;
 // var client = redis.createClient({url:redisurl});
 // Body Parser

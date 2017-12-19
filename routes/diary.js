@@ -18,15 +18,15 @@ router.patch("/:id",function(req,res){
 })
 
 const addrecord = (value) =>{
-    return {"error":false,"result":"Need to Complete the Function"}
+     return {"error":false,"result":"Need to Complete the Function","reqdata":value}
 }
 
 const deleterecord = (value) =>{
-    return {"error":false,"result":"Need to Complete the Function"}
+   return {"error":false,"result":"Need to Complete the Function","reqdata":value}
 }
 
 const updaterecord = (value) =>{
-    return {"error":false,"result":"Need to Complete the Function"}
+    return {"error":false,"result":"Need to Complete the Function","reqdata":value}
 }
 
 module.exports = router;

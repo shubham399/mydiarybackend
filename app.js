@@ -3,8 +3,8 @@ var app = express()
 var bodyParser = require('body-parser');
 var redis = require("redis");
 const diaryRouter = require("./routes/diary")
-const redisurl =process.env.REDIS_URL;
-var client = redis.createClient({url:redisurl});
+// const redisurl =process.env.REDIS_URL;
+// var client = redis.createClient({url:redisurl});
 // Body Parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

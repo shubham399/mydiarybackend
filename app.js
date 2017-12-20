@@ -4,15 +4,24 @@ var bodyParser = require('body-parser');
 var redis = require("redis");
 const diaryRouter = require("./routes/diary")
 var helmet = require('helmet')
-app.use(helmet())
-// const redisurl =process.env.REDIS_URL;
-// var client = redis.createClient({url:redisurl});
-// Body Parser
+const initmiddleware = () =>{
+app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+}
 
-app.get('/', function (req, res) {
+// const redisurl =process.env.REDIS_URL;
+// var client = redis.createClient({url:redisurl});
+const initroutes = () =>{
+    app.get('/', function (req, res) {
   res.send('UP')
 });
 app.use("/diary", diaryRouter);
-app.listen(process.env.PORT, () => console.log('Example app listening on port '+ process.env.PORT))
+}
+
+const startserver = () =>{
+app.listen(process.env.PORT, () => console.log('Example app listening on port '+ process.env.PORT))    
+}
+initmiddleware();
+initroutes();
+startserver();

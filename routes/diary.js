@@ -9,7 +9,7 @@ router.use(function (req, res, next) {
   if(api ==config.api_key)
   {
      var userid =models.User.findOne({ where: {userkey:session} }).then((val)=>{
-     req.body["userid"]=userid.dataValues.id;
+     req.body["userid"]=val.dataValues.id;
      next()         
      }).catch((err)=>{
          res.send({"error":true,"message":"Invalid SESSION KEY"});

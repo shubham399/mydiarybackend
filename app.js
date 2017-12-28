@@ -1,23 +1,24 @@
 var express = require('express')
-var app = express()
-var bodyParser = require('body-parser');
-var redis = require("redis");
+const app = express()
+const bodyParser = require('body-parser');
 const diaryRouter = require("./routes/diary")
-var helmet = require('helmet')
-var models = require('./models');
+const userRouter = require("./routes/user")
+const helmet = require('helmet')
+const models = require('./models');
+const validator = require('express-validator');
 const initmiddleware = () =>{
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(validator());
 }
 
-// const redisurl =process.env.REDIS_URL;
-// var client = redis.createClient({url:redisurl});
 const initroutes = () =>{
     app.get('/', function (req, res) {
   res.send('UP')
 });
 app.use("/diary", diaryRouter);
+app.use("/users", userRouter);
 }
 
 const startserver = () =>{

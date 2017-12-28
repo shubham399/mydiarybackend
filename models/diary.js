@@ -1,8 +1,15 @@
 'use strict';
+const Users = require("./users");
 module.exports = (sequelize, Sequelize) => {
-  var Task = sequelize.define('Task', {
-    title: Sequelize.STRING
-  });
-
-  return Task;
+  var Diary = sequelize.define('diary', {
+    id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+    },
+    title:{type:Sequelize.STRING},
+    note:{type:Sequelize.TEXT},
+    });
+Diary.belongsTo(Users);
+  return Diary;
 };

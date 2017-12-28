@@ -60,7 +60,10 @@ const addrecord = (state,callback) =>{
 
 const deleterecord = (state,callback) =>{
    models.Diary.destroy({where:{id:state.id}}).then((val)=>{
+       if(val)
         callback({"status":"SUCCESS","message":"Data Deleted"})
+        else
+        callback({"status":"FAILURE","message":"Data Not Found"})
     }).catch((err)=>{
         callback(err);
     })
@@ -68,7 +71,10 @@ const deleterecord = (state,callback) =>{
 
 const updaterecord = (value,callback) =>{
     models.Diary.update({title:value.title,note:value.note},{ where: {"id":value.id}}).then((val)=>{
+        if(val)
         callback({"status":"SUCCESS","message":"Data Updated"})
+        else
+        callback({"status":"FAILURE","message":"Data Not Found"})
     }).catch((err)=>{
         callback(err);
     })

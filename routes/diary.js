@@ -38,13 +38,13 @@ router.post("/",function(req,res){
   }
 })
 router.delete("/:id",function(req,res){
-    req.body.id = req.param.id;
+ req.body["id"] =req.params.id;
     deleterecord(req.body,(val)=>{
         res.send(val);
     });
 })
 router.patch("/:id",function(req,res){
-      req.body["id"] ="somevalue";
+      req.body["id"] =req.params.id;
     updaterecord(req.body,(val)=>{
         res.send(val);
     });

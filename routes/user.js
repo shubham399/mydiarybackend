@@ -61,7 +61,6 @@ const register =(state,callback)=>{
     ).catch((err)=>{
         callback({error:true,"message":"Something Went Wrong"});
     })
-     
 }
 const login = (state,callback) => {
     state.password = helper.gethash(state.password);

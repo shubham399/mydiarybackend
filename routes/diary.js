@@ -5,9 +5,17 @@ const  env   = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 router.use(function (req, res, next) {
   const api = req.get('X-API-KEY');
-  console.log(api);
+  const session = req.get('X-SESSION-KEY');
   if(api ==config.api_key)
-  next()
+  {
+     var userid =models.User.findOne({ where: {userkey:session} }).then((val)=>{
+     req.body["userid"]=userid.dataValues.id;
+     next()         
+     }).catch((err)=>{
+         res.send({"error":true,"message":"Invalid SESSION KEY"});
+     })
+
+  }
   else
     res.send({"error":true,"message":"Invalid API KEY"});
 });

@@ -32,7 +32,7 @@ router.post("/login",function(req,res){
   }
 })
 router.post("/logout",function(req,res){
-      req.checkBody("userkey", "Already LoggedOut").isLength({ min: 1 });
+      req.checkBody("sessionkey", "Already LoggedOut").isLength({ min: 1 });
     var errors = req.validationErrors();
   if (errors) {
     res.send({status:"LOGGEDOUT"});
@@ -64,9 +64,9 @@ const login = (state,callback) => {
 }
 
 const logout = (state,callback)=>{
-    models.User.update({"userkey":helper.getuuid()},{ where: {"sessionkey":state.userkey}}).then((val)=>{
+    models.User.update({"userkey":helper.getuuid()},{ where: {"userkey":state.sessionkey}}).then((val)=>{
         
-         callback({status:"SUCCESS","userkey":val.dataValues.userkey})}
+         callback({status:"SUCCESS","message":"LoggedOut Successful"})}
     ).catch((err)=>{
         callback({"error":true,"message":"Something Went Wrong"});
     })

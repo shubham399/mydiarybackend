@@ -59,11 +59,14 @@ const addrecord = (state,callback) =>{
 }
 
 const deleterecord = (state,callback) =>{
-   models.Diary.delete
+   models.Diary.destroy({where:{id:state.id}}).then((val)=>{
+        callback({"status":"SUCCESS","message":"Data Deleted","value":val})
+    }).catch((err)=>{
+        callback(err);
+    })
 }
 
 const updaterecord = (value,callback) =>{
-    console.log(value);
     models.Diary.update({title:value.title,note:value.note},{ where: {"id":value.id}}).then((val)=>{
         callback({"status":"SUCCESS","message":"Data Updated","value":val})
     }).catch((err)=>{
@@ -71,8 +74,7 @@ const updaterecord = (value,callback) =>{
     })
 }
 const getall = (state,callback) =>{
-    // callback(state);
-     models.Diary.findAll({where:{UserId:state.UserId}}).then((val)=>{
+    models.Diary.findAll({where:{UserId:state.UserId}}).then((val)=>{
          callback(val);
      }).catch((err)=>{
          callback({error:true,"message":"Something Went Wrong","uid":state.UserId});

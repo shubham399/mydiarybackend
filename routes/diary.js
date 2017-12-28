@@ -65,7 +65,7 @@ const deleterecord = (state,callback) =>{
 const updaterecord = (value,callback) =>{
     console.log(value);
     models.Diary.update({title:value.title,note:value.note},{ where: {"id":value.id}}).then((val)=>{
-        callback({"status":"SUCCESS","message":"Data Updated","value":val})
+        callback({"status":"SUCCESS","message":"Data Updated"})
     }).catch((err)=>{
         callback(err);
     })
@@ -80,7 +80,7 @@ const getall = (state,callback) =>{
              delete x.UserId;
              return x;}));
      }).catch((err)=>{
-         callback({error:true,"message":"Something Went Wrong","uid":state.UserId});
+         callback({error:true,"message":"Something Went Wrong"});
      })
 }
 

@@ -94,6 +94,7 @@ const getall = (state,callback) =>{
 }
 const getone = (state,callback) =>{
     models.Diary.findOne({where:{UserId:state.UserId,id:state.id}}).then((val)=>{
+        console.log(val);
         delete val["createdAt"];
         delete val["updatedAt"];
         delete val["UserId"];

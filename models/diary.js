@@ -10,6 +10,6 @@ module.exports = (sequelize, Sequelize) => {
     title:{type:Sequelize.STRING},
     note:{type:Sequelize.TEXT},
     });
-Diary.belongsTo(Users);
+
   return Diary;
 };

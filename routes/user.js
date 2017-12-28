@@ -25,6 +25,7 @@ router.post("/login",function(req,res){
 })
 
 const register =(state,callback)=>{
+    console.log(helper.getuuid())
     state["userkey"]=helper.getuuid();
     state.password = helper.gethash(state.password);
     models.Users.create(state).then((val)=>{

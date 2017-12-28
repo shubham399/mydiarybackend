@@ -87,6 +87,12 @@ const updaterecord = (value,callback) =>{
 }
 const getall = (state,callback) =>{
     models.Diary.findAll({where:{UserId:state.UserId}}).then((val)=>{
+        val = val.map(function(x){
+            x=x.dataValues;
+            delete x["createdAt"];
+        delete x["updatedAt"];
+        delete x["UserId"];    
+        })
          callback(val);
      }).catch((err)=>{
          callback({error:true,"message":"Something Went Wrong"});
@@ -95,7 +101,6 @@ const getall = (state,callback) =>{
 const getone = (state,callback) =>{
     models.Diary.findOne({where:{UserId:state.UserId,id:state.id}}).then((val)=>{
         val = val.dataValues;
-        console.log(val);
         delete val["createdAt"];
         delete val["updatedAt"];
         delete val["UserId"];

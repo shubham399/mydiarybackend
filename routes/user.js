@@ -14,8 +14,8 @@ router.post("/register",function(req,res){
     return;
   } else {
     register(req.body,(code,val)=>{
-        res.status(code);
-        res.send(val);
+        console.log("---CALLBACK ----");
+        res.status(code).send(val);
     });
   }
     
@@ -28,8 +28,10 @@ const register =(state,callback)=>{
     state["userkey"]=helper.getuuid();
     state.password = helper.gethash(state.password);
     users.create(state).then((val)=>{
+        console.log("---REGISTER SUCCESS----Reaching Here")
         callback(200,{"status":"SUCCESS","desc":"User Register Successfully"})}
     ).catch((err)=>{
+        console.log("---REGISTER FAILURE----Reaching Here")
         callback(400,err);
     })
      

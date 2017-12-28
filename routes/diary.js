@@ -20,8 +20,10 @@ router.use(function (req, res, next) {
     res.send({"error":true,"message":"Invalid API KEY"});
 });
 router.get("/",function(req,res){
-    res.send("UP");
-})
+    getall(req.body,(val)=>{
+        res.send(val);
+    })
+});
 router.post("/",function(req,res){
     req.checkBody("title", "Enter a Title").isLength({ min: 1});
     req.checkBody("note", "Enter a Note").isLength({ min: 1});
@@ -64,7 +66,7 @@ req.checkBody("password", "Password must contain a number.").isLength({ min: 5 }
 
 const addrecord = (state,callback) =>{
    models.Diary.create(state).then((val)=>{
-         callback({"status":"SUCCESS","desc":"User Register Successfully","data":val})}
+         callback({"id":val.id,"status":"SUCCESS","desc":"User Register Successfully"})}
     ).catch((err)=>{
         callback({error:true,"message":"Something Went Wrong"});
     })
@@ -76,6 +78,13 @@ const deleterecord = (state,callback) =>{
 
 const updaterecord = (value,callback) =>{
     return {"error":false,"result":"Need to Complete the Function","reqdata":value}
+}
+const getall = (state,callback) =>{
+     models.Diary.findAll({where:{userId:state.userId}}).then((val)=>{
+         callback(val);
+     }).catch((err)=>{
+         callback({error:true,"message":"Something Went Wrong"});
+     })
 }
 
 module.exports = router;

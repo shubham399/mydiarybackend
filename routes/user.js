@@ -35,7 +35,7 @@ router.post("/logout",function(req,res){
       req.checkBody("sessionkey", "Already LoggedOut").isLength({ min: 1 });
     var errors = req.validationErrors();
   if (errors) {
-    res.send({status:"LOGGEDOUT"});
+    res.send({status:"Already LoggedOut"});
     return;
   } else {
     logout(req.body,(val)=>{

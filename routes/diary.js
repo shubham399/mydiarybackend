@@ -91,7 +91,8 @@ const getall = (state,callback) =>{
             x=x.dataValues;
             delete x["createdAt"];
         delete x["updatedAt"];
-        delete x["UserId"];    
+        delete x["UserId"];
+        return x;
         })
          callback(val);
      }).catch((err)=>{

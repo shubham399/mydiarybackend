@@ -41,14 +41,14 @@ router.post("/login",function(req,res){
     });
   }
 })
-router.post("/logout",function(req,res){
-      req.checkBody("sessionkey", "Already LoggedOut").isLength({ min: 1 });
+router.get("/logout",function(req,res){
+    var sessionkey=req.get("X-SESSION-KEY");
     var errors = req.validationErrors();
   if (errors) {
     res.send({status:"Already LoggedOut"});
     return;
   } else {
-    logout(req.body,(val)=>{
+    logout(sessionkey,(val)=>{
         res.send(val);
     });
   }
@@ -73,8 +73,8 @@ const login = (state,callback) => {
     })
 }
 
-const logout = (state,callback)=>{
-    models.User.update({"userkey":helper.getuuid()},{ where: {"userkey":state.sessionkey}}).then((val)=>{
+const logout = (sessionkey,callback)=>{
+    models.User.update({"userkey":helper.getuuid()},{ where: {"userkey":sessionkey}}).then((val)=>{
         
          callback({status:"SUCCESS","message":"LoggedOut Successful"})}
     ).catch((err)=>{

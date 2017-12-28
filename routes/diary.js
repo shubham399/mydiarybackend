@@ -44,7 +44,7 @@ router.delete("/:id",function(req,res){
     });
 })
 router.patch("/:id",function(req,res){
-      req.body.id = req.param.id;
+      req.body["id"] = req.param.id;
     updaterecord(req.body,(val)=>{
         res.send(val);
     });

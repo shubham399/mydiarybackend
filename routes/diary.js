@@ -79,6 +79,7 @@ const getall = (state,callback) =>{
              return rec;
          });
          console.log(temp);
+          console.log(val);
          callback(val);
      }).catch((err)=>{
          callback({error:true,"message":"Something Went Wrong","uid":state.UserId});

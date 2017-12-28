@@ -38,30 +38,16 @@ router.post("/",function(req,res){
   }
 })
 router.delete("/:id",function(req,res){
-    req.checkBody("title", "Enter a Title").isLength({ min: 5 }).matches(/\d/);
-    req.checkBody("username", "Enter a valid Username").isLength({ min: 3 });
-    var errors = req.validationErrors();
-  if (errors) {
-    res.send(errors);
-    return;
-  } else {
+    req.body.id = req.param.id;
     deleterecord(req.body,(val)=>{
         res.send(val);
     });
-  }
 })
 router.patch("/:id",function(req,res){
-req.checkBody("password", "Password must contain a number.").isLength({ min: 5 }).matches(/\d/);
-    req.checkBody("username", "Enter a valid Username").isLength({ min: 3 });
-    var errors = req.validationErrors();
-  if (errors) {
-    res.send(errors);
-    return;
-  } else {
+    req.body.id = req.param.id;
     updaterecord(req.body,(val)=>{
         res.send(val);
     });
-  }
 })
 
 const addrecord = (state,callback) =>{
@@ -73,11 +59,15 @@ const addrecord = (state,callback) =>{
 }
 
 const deleterecord = (state,callback) =>{
-   return {"error":false,"result":"Need to Complete the Function","reqdata":value}
+   models.Diary.delete
 }
 
 const updaterecord = (value,callback) =>{
-    return {"error":false,"result":"Need to Complete the Function","reqdata":value}
+    models.User.update({title:value.title,note:value.note},{ where: {"id":value.id}}).then((val)=>{
+        callback({"status":"SUCCESS","message":"Data Updated"})
+    }).catch((err)=>{
+        callback(err);
+    })
 }
 const getall = (state,callback) =>{
     // callback(state);

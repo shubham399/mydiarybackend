@@ -75,7 +75,7 @@ const login = (state,callback) => {
 const logout = (sessionkey,callback)=>{
     models.User.update({"userkey":helper.getuuid()},{ where: {"userkey":sessionkey}}).then((val)=>{
         
-         callback({"error":false,"status:"SUCCESS","message":"LoggedOut Successful"})}
+         callback({"error":false,"status":"SUCCESS","message":"LoggedOut Successful"})}
     ).catch((err)=>{
         callback({"error":true,"message":"Something Went Wrong"});
     })

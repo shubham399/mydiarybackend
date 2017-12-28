@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, Sequelize) => {
   var Task = sequelize.define('Task', {
-    title: Sequelize.TEXT
+    title: Sequelize.STRING
   });
 
   return Task;

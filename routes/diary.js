@@ -73,7 +73,12 @@ const updaterecord = (value,callback) =>{
 const getall = (state,callback) =>{
     // callback(state);
      models.Diary.findAll({UserId:state.UserId}).then((val)=>{
-         callback(val.map(x =>{delete x.id;delete x.createdAt;delete x.updatedAt; delete x.UserId; return x}));
+         callback(val.map(function(x){
+             delete x.id;
+             delete x.createdAt;
+             delete x.updatedAt;
+             delete x.UserId;
+             return x;}));
      }).catch((err)=>{
          callback({error:true,"message":"Something Went Wrong","uid":state.UserId});
      })

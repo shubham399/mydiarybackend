@@ -24,6 +24,12 @@ router.get("/",function(req,res){
         res.send(val);
     })
 });
+router.get("/:id",function(req,res){
+    req.body["id"] =req.params.id;
+    getone(req.body,(val)=>{
+        res.send(val);
+    })
+});
 router.post("/",function(req,res){
     req.checkBody("title", "Enter a Title").isLength({ min: 1});
     req.checkBody("note", "Enter a Note").isLength({ min: 1});
@@ -86,5 +92,11 @@ const getall = (state,callback) =>{
          callback({error:true,"message":"Something Went Wrong"});
      })
 }
-
+const getone = (state,callback) =>{
+    models.Diary.findOne({where:{UserId:state.UserId,id:state.id}}).then((val)=>{
+         callback(val);
+     }).catch((err)=>{
+         callback({error:true,"message":"Something Went Wrong"});
+     })
+}
 module.exports = router;

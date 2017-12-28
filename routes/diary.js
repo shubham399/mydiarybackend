@@ -58,7 +58,7 @@ router.patch("/:id",function(req,res){
 
 const addrecord = (state,callback) =>{
    models.Diary.create(state).then((val)=>{
-         callback({"id":val.id,"status":"SUCCESS","desc":"User Register Successfully"})}
+         callback({"error":false,"data":{"id":val.id,"status":"SUCCESS","desc":"User Register Successfully"}})}
     ).catch((err)=>{
         callback({error:true,"message":"Something Went Wrong"});
     })
@@ -67,9 +67,9 @@ const addrecord = (state,callback) =>{
 const deleterecord = (state,callback) =>{
    models.Diary.destroy({where:{id:state.id}}).then((val)=>{
        if(val)
-        callback({"status":"SUCCESS","message":"Data Deleted"})
+        callback({"error":false,"status":"SUCCESS","message":"Data Deleted"})
         else
-        callback({"status":"FAILURE","message":"Data Not Found"})
+        callback({"error":true,"status":"FAILURE","message":"Data Not Found"})
     }).catch((err)=>{
         callback(err);
     })
@@ -78,9 +78,9 @@ const deleterecord = (state,callback) =>{
 const updaterecord = (value,callback) =>{
     models.Diary.update({title:value.title,note:value.note},{ where: {"id":value.id}}).then((val)=>{
         if(val)
-        callback({"status":"SUCCESS","message":"Data Updated"})
+        callback({"error":false,"status":"SUCCESS","message":"Data Updated"})
         else
-        callback({"status":"FAILURE","message":"Data Not Found"})
+        callback({"error":true,"status":"FAILURE","message":"Data Not Found"})
     }).catch((err)=>{
         callback(err);
     })
@@ -94,7 +94,7 @@ const getall = (state,callback) =>{
         delete x["UserId"];
         return x;
         })
-         callback(val);
+         callback({"error":false,"data":val);
      }).catch((err)=>{
          callback({error:true,"message":"Something Went Wrong"});
      })
@@ -105,7 +105,7 @@ const getone = (state,callback) =>{
         delete val["createdAt"];
         delete val["updatedAt"];
         delete val["UserId"];
-         callback(val);
+         callback({"error":false,"data":val);
      }).catch((err)=>{
          callback({error:true,"message":"Something Went Wrong"});
      })

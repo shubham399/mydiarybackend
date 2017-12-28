@@ -81,10 +81,10 @@ const updaterecord = (value,callback) =>{
 }
 const getall = (state,callback) =>{
     // callback(state);
-     models.Diary.findAll({where:{Userid:state.userid}}).then((val)=>{
+     models.Diary.findAll({UserId:state.UserId}).then((val)=>{
          callback(val);
      }).catch((err)=>{
-         callback({error:true,"message":"Something Went Wrong"});
+         callback({error:true,"message":"Something Went Wrong","uid":state.UserId});
      })
 }
 

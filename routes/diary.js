@@ -8,7 +8,7 @@ router.use(function (req, res, next) {
   const session = req.get('X-SESSION-KEY');
   if(api ==config.api_key)
   {
-     var userid =models.User.findOne({ where: {userkey:session} }).then((val)=>{
+     models.User.findOne({ where: {userkey:session} }).then((val)=>{
      req.body["UserId"]=val.dataValues.id;
      next()         
      }).catch((err)=>{

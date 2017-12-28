@@ -6,7 +6,6 @@ const diaryRouter = require("./routes/diary")
 var helmet = require('helmet')
 var models = require('./models');
 const initmiddleware = () =>{
-    models.sync();
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -24,6 +23,7 @@ app.use("/diary", diaryRouter);
 const startserver = () =>{
 app.listen(process.env.PORT, () => console.log('Example app listening on port '+ process.env.PORT))    
 }
+  models.sequelize.sync();
 initmiddleware();
 initroutes();
 startserver();

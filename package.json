@@ -20,6 +20,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
+    "crypto": "^1.0.1",
     "express": "^4.16.2",
     "express-validator": "^4.3.0",
     "fs": "0.0.1-security",

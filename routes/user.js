@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const users = require('../models/users');
+const Users = require('../models')["Users"];
 const helper = require("../utils/helper");
 router.get("/",function(req,res){
     res.send("UP");
@@ -27,7 +27,7 @@ router.post("/login",function(req,res){
 const register =(state,callback)=>{
     state["userkey"]=helper.getuuid();
     state.password = helper.gethash(state.password);
-    users.create(state).then((val)=>{
+    Users.create(state).then((val)=>{
         console.log("---REGISTER SUCCESS----Reaching Here")
         callback({"status":"SUCCESS","desc":"User Register Successfully"})}
     ).catch((err)=>{

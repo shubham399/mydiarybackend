@@ -77,7 +77,7 @@ const getall = (state,callback) =>{
     models.Diary.findAll({where:{UserId:state.UserId}}).then((val)=>{
          callback(val);
      }).catch((err)=>{
-         callback({error:true,"message":"Something Went Wrong");
+         callback({error:true,"message":"Something Went Wrong"});
      })
 }
 

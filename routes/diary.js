@@ -94,7 +94,7 @@ const getall = (state,callback) =>{
         delete x["UserId"];
         return x;
         })
-         callback({"error":false,"data":val);
+         callback({"error":false,"data":val});
      }).catch((err)=>{
          callback({error:true,"message":"Something Went Wrong"});
      })
@@ -105,7 +105,7 @@ const getone = (state,callback) =>{
         delete val["createdAt"];
         delete val["updatedAt"];
         delete val["UserId"];
-         callback({"error":false,"data":val);
+         callback({"error":false,"data":val});
      }).catch((err)=>{
          callback({error:true,"message":"Something Went Wrong"});
      })

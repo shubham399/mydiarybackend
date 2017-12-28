@@ -65,7 +65,7 @@ const deleterecord = (state,callback) =>{
 const updaterecord = (value,callback) =>{
     console.log(value);
     models.User.update({title:value.title,note:value.note},{ where: {"id":value.id}}).then((val)=>{
-        callback({"status":"SUCCESS","message":"Data Updated"})
+        callback({"status":"SUCCESS","message":"Data Updated","value":val})
     }).catch((err)=>{
         callback(err);
     })

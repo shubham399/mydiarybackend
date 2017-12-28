@@ -22,7 +22,7 @@ router.use(function (req, res, next) {
 router.get("/",function(req,res){
     res.send("UP");
 })
-router.post("/",function(req,res){req.checkBody("password", "Password must contain a number.").isLength({ min: 5 }).matches(/\d/);
+router.post("/",function(req,res){
     req.checkBody("title", "Enter a Title").isLength({ min: 1});
     req.checkBody("note", "Enter a Note").isLength({ min: 1});
     var errors = req.validationErrors();

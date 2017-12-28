@@ -31,7 +31,18 @@ router.post("/login",function(req,res){
     });
   }
 })
-
+router.post("/logout",function(req,res){
+      req.checkBody("userkey", "Already LoggedOut").isLength({ min: 1 });
+    var errors = req.validationErrors();
+  if (errors) {
+    res.send({status:"LOGGEDOUT"});
+    return;
+  } else {
+    logout(req.body,(val)=>{
+        res.send(val);
+    });
+  }
+})
 const register =(state,callback)=>{
     state["userkey"]=helper.getuuid();
     state.password = helper.gethash(state.password);
@@ -46,9 +57,18 @@ const login = (state,callback) => {
     state.password = helper.gethash(state.password);
     models.User.findOne({ where: {username: state.username,password:state.password} }).then((val)=>{
         
-         callback(val.dataValues)}
+         callback({status:"SUCCESS","userkey":val.dataValues.userkey})}
     ).catch((err)=>{
-        callback(err);
+        callback({"error":true,"message":"Invalid Username or Password"});
+    })
+}
+
+const logout = (state,callback)=>{
+    models.User.update({"userkey":helper.getuuid()},{ where: {"userkey":state.userkey}}).then((val)=>{
+        
+         callback({status:"SUCCESS","userkey":val.dataValues.userkey})}
+    ).catch((err)=>{
+        callback({"error":true,"message":"Something Went Wrong"});
     })
 }
 

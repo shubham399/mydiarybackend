@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
     note:{type:Sequelize.TEXT},
     });
 Diary.associate = function (models) {
-    models.Task.belongsTo(models.User, {
+    models.Diary.belongsTo(models.User, {
       onDelete: "CASCADE",
       foreignKey: {
         allowNull: false

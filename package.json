@@ -21,8 +21,13 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "fs": "0.0.1-security",
     "helmet": "^3.9.0",
+    "path": "^0.12.7",
+    "pg": "^6.4.2",
+    "pg-hstore": "^2.3.2",
     "redis": "^2.8.0",
+    "sequelize": "^4.28.6",
     "uuid": "^3.1.0"
   }
 }

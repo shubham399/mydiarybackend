@@ -4,7 +4,9 @@ var bodyParser = require('body-parser');
 var redis = require("redis");
 const diaryRouter = require("./routes/diary")
 var helmet = require('helmet')
+var models = require('./models');
 const initmiddleware = () =>{
+    models.sync();
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

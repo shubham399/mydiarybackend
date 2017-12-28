@@ -57,14 +57,14 @@ const login = (state,callback) => {
     state.password = helper.gethash(state.password);
     models.User.findOne({ where: {username: state.username,password:state.password} }).then((val)=>{
         
-         callback({status:"SUCCESS","userkey":val.dataValues.userkey})}
+         callback({status:"SUCCESS","sessionkey":val.dataValues.userkey})}
     ).catch((err)=>{
         callback({"error":true,"message":"Invalid Username or Password"});
     })
 }
 
 const logout = (state,callback)=>{
-    models.User.update({"userkey":helper.getuuid()},{ where: {"userkey":state.userkey}}).then((val)=>{
+    models.User.update({"userkey":helper.getuuid()},{ where: {"sessionkey":state.userkey}}).then((val)=>{
         
          callback({status:"SUCCESS","userkey":val.dataValues.userkey})}
     ).catch((err)=>{

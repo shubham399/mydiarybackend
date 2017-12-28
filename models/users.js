@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, Sequelize) => {
-  var Users = sequelize.define('user', {
+  var User = sequelize.define('User', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -11,6 +11,8 @@ module.exports = (sequelize, Sequelize) => {
     email:{type:Sequelize.STRING,unique:true},
     userkey:{type:Sequelize.STRING,unique:true}
   });
-
-  return Users;
+User.associate = function(models) {
+    models.User.hasMany(models.Diary);
+};
+  return User;
 };

@@ -59,7 +59,7 @@ const register =(state,callback)=>{
     models.User.create(state).then((val)=>{
          callback({"status":"SUCCESS","desc":"User Register Successfully"})}
     ).catch((err)=>{
-        callback(err);
+        callback({error:true,"message":"Something Went Wrong"});
     })
      
 }

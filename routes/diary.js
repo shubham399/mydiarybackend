@@ -78,8 +78,8 @@ const deleterecord = (state,callback) =>{
 const updaterecord = (value,callback) =>{
     models.Diary.update({title:value.title,note:value.note},{ where: {"id":value.id}}).then((val)=>{
 
-        if(val)
-        callback({"error":false,"status":"SUCCESS","message":"Data Updated","val":val})
+        if(val[0])
+        callback({"error":false,"status":"SUCCESS","message":"Data Updated"})
         else
         callback({"error":true,"status":"FAILURE","message":"Data Not Found"})
     }).catch((err)=>{

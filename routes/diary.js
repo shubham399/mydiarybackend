@@ -109,7 +109,7 @@ const getone = (state,callback) =>{
         delete val["UserId"];
          callback({"error":false,"data":val});
      }).catch((err)=>{
-         callback({error:true,"status":"FAILURE","message":"Something Went Wrong"});
+         callback({error:true,"status":"FAILURE","message":"Something Went Wrong","emsg":err});
      })
 }
 module.exports = router;

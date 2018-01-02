@@ -55,7 +55,7 @@ router.get("/logout",function(req,res){
     });
   }
 })
-const senduserdetails(req,callback)=>{
+const senduserdetails=(req,callback)=>{
   const session = req.get('X-SESSION-KEY');
    models.User.findOne({ where: {userkey:session} }).then((val)=>{
      val = val.dataValues;

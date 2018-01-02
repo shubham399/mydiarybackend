@@ -57,6 +57,7 @@ router.get("/logout",function(req,res){
 })
 const senduserdetails=(req,callback)=>{
   const session = (req.headers).get('X-SESSION-KEY');
+  console.log("XSESSIONKEY:",req.headers["X-SESSION-KEY"]);
   console.log(session);
    models.User.findOne({ where: {userkey:session} }).then((val)=>{
      console.log(val);
@@ -75,7 +76,7 @@ const register =(state,callback)=>{
     models.User.create(state).then((val)=>{
          callback({"error":false,"status":"SUCCESS","desc":"User Register Successfully"})}
     ).catch((err)=>{
-        callback({error:true,"status":"FAILURE","message":"Something Went Wrong"});
+        callback({error:true,"status":"FAILURE","message":"Something Went Wrong","error_msg":err});
     })
 }
 const login = (state,callback) => {

@@ -10,14 +10,14 @@ router.use(function (req, res, next) {
   {
      models.User.findOne({ where: {userkey:session} }).then((val)=>{
      req.body["UserId"]=val.dataValues.id;
-     next()         
+     next()
      }).catch((err)=>{
-         res.send({"error":true,"message":"Invalid SESSION KEY"});
+         res.send({"error":true,"status":"FAILURE","message":"Invalid SESSION KEY"});
      })
 
   }
   else
-    res.send({"error":true,"message":"Invalid API KEY"});
+    res.send({"error":true,"status":"FAILURE","message":"Invalid API KEY"});
 });
 router.get("/",function(req,res){
     getall(req.body,(val)=>{
@@ -60,7 +60,7 @@ const addrecord = (state,callback) =>{
    models.Diary.create(state).then((val)=>{
          callback({"error":false,"data":{"id":val.id,"status":"SUCCESS","desc":"User Register Successfully"}})}
     ).catch((err)=>{
-        callback({error:true,"message":"Something Went Wrong"});
+        callback({error:true,"status":"FAILURE","message":"Something Went Wrong"});
     })
 }
 
@@ -96,7 +96,7 @@ const getall = (state,callback) =>{
         })
          callback({"error":false,"data":val});
      }).catch((err)=>{
-         callback({error:true,"message":"Something Went Wrong"});
+         callback({error:true,"status":"FAILURE","message":"Something Went Wrong"});
      })
 }
 const getone = (state,callback) =>{
@@ -107,7 +107,7 @@ const getone = (state,callback) =>{
         delete val["UserId"];
          callback({"error":false,"data":val});
      }).catch((err)=>{
-         callback({error:true,"message":"Something Went Wrong"});
+         callback({error:true,"status":"FAILURE","message":"Something Went Wrong"});
      })
 }
 module.exports = router;

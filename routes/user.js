@@ -9,7 +9,7 @@ router.use(function (req, res, next) {
   if(api ==config.api_key)
   next()
   else
-    res.send({"error":true,"message":"Invalid API KEY"});
+    res.send({"error":true,"status":"FAILURE","message":"Invalid API KEY"});
 });
 router.get("/",function(req,res){
     res.send("UP");
@@ -26,7 +26,7 @@ router.post("/register",function(req,res){
         res.send(val);
     });
   }
-    
+
 })
 router.post("/login",function(req,res){
     req.checkBody("password", "Password must contain a number.").isLength({ min: 5 }).matches(/\d/);
@@ -59,25 +59,25 @@ const register =(state,callback)=>{
     models.User.create(state).then((val)=>{
          callback({"error":false,"status":"SUCCESS","desc":"User Register Successfully"})}
     ).catch((err)=>{
-        callback({error:true,"message":"Something Went Wrong"});
+        callback({error:true,"status":"FAILURE","message":"Something Went Wrong"});
     })
 }
 const login = (state,callback) => {
     state.password = helper.gethash(state.password);
     models.User.findOne({ where: {username: state.username,password:state.password} }).then((val)=>{
-        
-         callback({"error":false,status:"SUCCESS","sessionkey":val.dataValues.userkey})}
+
+         callback({"error":false,"status":"SUCCESS","SESSION_KEY":val.dataValues.userkey})}
     ).catch((err)=>{
-        callback({"error":true,"message":"Invalid Username or Password"});
+        callback({"error":true,"status":"FAILURE","message":"Invalid Username or Password"});
     })
 }
 
 const logout = (sessionkey,callback)=>{
     models.User.update({"userkey":helper.getuuid()},{ where: {"userkey":sessionkey}}).then((val)=>{
-        
+
          callback({"error":false,"status":"SUCCESS","message":"LoggedOut Successful"})}
     ).catch((err)=>{
-        callback({"error":true,"message":"Something Went Wrong"});
+        callback({"error":true,"status":"FAILURE","message":"Something Went Wrong"});
     })
 }
 

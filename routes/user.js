@@ -104,7 +104,8 @@ const register = (state, callback) => {
     callback({
       "error": false,
       "status": "SUCCESS",
-      "desc": "User Register Successfully"
+      "desc": "User Register Successfully",
+      "SESSION_KEY": val.dataValues.userkey
     })
   }).catch((err) => {
     callback({

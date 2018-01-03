@@ -58,7 +58,7 @@ router.patch("/:id",function(req,res){
 
 const addrecord = (state,callback) =>{
    models.Diary.create(state).then((val)=>{
-         callback({"error":false,"data":{"id":val.id,"status":"SUCCESS","desc":"User Register Successfully"}})}
+         callback({"error":false,"data":{"id":val.id,"status":"SUCCESS","desc":"Record Created Successfully"}})}
     ).catch((err)=>{
         callback({error:true,"status":"FAILURE","message":"Something Went Wrong"});
     })

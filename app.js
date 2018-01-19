@@ -6,11 +6,15 @@ const userRouter = require("./routes/user")
 const helmet = require('helmet')
 const models = require('./models');
 const validator = require('express-validator');
+const apiauthMiddleware = require("./middlewares/apiauth")
+const sessionauth = require("./middlewares/sessionauth")
 const initmiddleware = () =>{
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(validator());
+app.use(apiauthMiddleware);
+app.use("/diary",sessionauth);
 }
 
 const initroutes = () =>{

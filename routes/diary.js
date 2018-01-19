@@ -3,7 +3,22 @@ const models = require('../models');
 const helper = require("../utils/helper");
 const  env   = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
+router.use(function (req, res, next) {
+  const api = req.get('X-API-KEY');
+  const session = req.get('X-SESSION-KEY');
+  if(api ==config.api_key)
+  {
+     models.User.findOne({ where: {userkey:session} }).then((val)=>{
+     req.body["UserId"]=val.dataValues.id;
+     next()
+     }).catch((err)=>{
+         res.send({"error":true,"status":"FAILURE","message":"Invalid SESSION KEY"});
+     })
 
+  }
+  else
+    res.send({"error":true,"status":"FAILURE","message":"Invalid API KEY"});
+});
 router.get("/",function(req,res){
     getall(req.body,(val)=>{
         res.send(val);

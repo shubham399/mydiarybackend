@@ -4,6 +4,12 @@ const helper = require("../utils/helper");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 
+router.get("/", function(req, res) {
+  senduserdetails(req, (val) => {
+    res.send(val);
+  })
+})
+
 router.post("/register", function(req, res) {
   req.checkBody("password", "Password must contain a number.").isLength({
     min: 5

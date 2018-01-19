@@ -4,10 +4,10 @@ const helper = require("../utils/helper");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 
-router.get("/", function(req, res) {
-  getall(req.body, (val) => {
-    res.send(val);
-  })
+router.get("/",function(req,res){
+    getall(req.body,(val)=>{
+        res.send(val);
+    })
 });
 
 router.get("/:id", function(req, res) {

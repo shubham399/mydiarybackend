@@ -3,23 +3,7 @@ const models = require('../models');
 const helper = require("../utils/helper");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
-router.use(function(req, res, next) {
-  const api = req.get('X-API-KEY');
-  console.log(api);
-  if (api == config.api_key)
-    next()
-  else
-    res.send({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Invalid API KEY"
-    });
-});
-router.get("/", function(req, res) {
-  senduserdetails(req, (val) => {
-    res.send(val);
-  })
-})
+
 router.post("/register", function(req, res) {
   req.checkBody("password", "Password must contain a number.").isLength({
     min: 5
@@ -36,8 +20,8 @@ router.post("/register", function(req, res) {
       res.send(val);
     });
   }
-
 })
+
 router.post("/login", function(req, res) {
   req.checkBody("password", "Password must contain a number.").isLength({
     min: 5
@@ -55,6 +39,7 @@ router.post("/login", function(req, res) {
     });
   }
 })
+
 router.get("/logout", function(req, res) {
   var sessionkey = req.get("X-SESSION-KEY");
   var errors = req.validationErrors();
@@ -71,6 +56,7 @@ router.get("/logout", function(req, res) {
     });
   }
 })
+
 const senduserdetails = (req, callback) => {
   const session = req.get('X-SESSION-KEY');
   models.User.findOne({
@@ -97,6 +83,7 @@ const senduserdetails = (req, callback) => {
     });
   })
 }
+
 const register = (state, callback) => {
   state["userkey"] = helper.getuuid();
   state.password = helper.gethash(state.password);
@@ -115,6 +102,7 @@ const register = (state, callback) => {
     });
   })
 }
+
 const login = (state, callback) => {
   state.password = helper.gethash(state.password);
   models.User.findOne({

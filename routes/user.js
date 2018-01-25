@@ -4,6 +4,7 @@ const helper = require("../utils/helper");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 const mailer = require("../utils/mailer");
+
 router.get("/", function(req, res) {
   senduserdetails(req, (val) => {
     res.send(val);
@@ -46,6 +47,11 @@ router.post("/login", function(req, res) {
   }
 })
 
+router.post("/forgotpassword",function(req,res){
+   forgotpasswordinit(req.body, (val) => {
+      res.send(val);
+    });
+});
 router.get("/logout", function(req, res) {
   var sessionkey = req.get("X-SESSION-KEY");
   var errors = req.validationErrors();
@@ -153,6 +159,10 @@ const logout = (sessionkey, callback) => {
       "message": "Something Went Wrong"
     });
   })
+}
+const forgotpasswordinit = (state,callback) =>{
+  mailer.sendmail(state.to,"Reset Your Password","<html><a href='http://google.com'/></html>")
+  callback({"error":false,"status":"TESTING"})
 }
 
 module.exports = router;

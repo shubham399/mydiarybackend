@@ -17,7 +17,6 @@ const sendmail = (to,subject,message)=>{
         from: 'noreply@midiaries.cf', // sender address
         to: to, // list of receivers
         subject: subject, // Subject line
-        text: message, // plain text body
         html: message // html body
     };
      transporter.sendMail(mailOptions, (error, info) => {

@@ -30,5 +30,4 @@ const sendmail = (to,subject,message)=>{
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
     });
 }
-sendmail("shubham.399@gmail.com","Testing","Hey This is <b>Test</b> message")
 exports.sendmail = sendmail;

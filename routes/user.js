@@ -161,8 +161,28 @@ const logout = (sessionkey, callback) => {
   })
 }
 const forgotpasswordinit = (state,callback) =>{
-  mailer.sendmail(state.to,"Reset Your Password","<html><a href='http://google.com'/></html>")
-  callback({"error":false,"status":"TESTING"})
+  const token = helper.gethash(helper.getuuid());
+  mailer.sendmail(state.email,"Reset Your Password","<html><body>Please Click on the Link to Reset your password :<a href='"+config.host+"/forgotpassword/"+token+"'>Click here</a> or copy the <b>URL</b> If it doesnot work "+config.host+"/forgotpassword/"+token+"</body></html>")
+   models.User.update({
+    "token": token
+  }, {
+    where: {
+      "email": state.email
+    }
+  }).then((val)=>{
+    callback({
+      "error": false,
+      "status": "SUCCESS",
+      "message": "ForgotPassword Initiated"
+    })
+  }).catch((err)=>{
+    callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "ForgotPassword Initiatation failed"
+    })
+  })
+  
 }
 
 module.exports = router;

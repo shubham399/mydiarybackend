@@ -195,7 +195,7 @@ const forgotpasswordinit = (state,callback) =>{
     if(val.dataValues.email == state.email){
   const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
   var forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
-  forgotpasswordcontenttemp =forgotpasswordcontenttemp.replace(/@@@@/,val.dataVaues.username)
+  forgotpasswordcontenttemp =forgotpasswordcontenttemp.replace(/@@@@/,val.dataValues.username)
   forgotpasswordcontenttemp = forgotpasswordcontenttemp.replace(/$$$$/,min)
   const subject = "Request to reset your myDiary password"
   mailer.sendmail(state.email,subject,forgotpasswordcontenttemp)

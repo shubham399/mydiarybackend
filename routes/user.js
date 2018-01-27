@@ -3,7 +3,14 @@ const models = require('../models');
 const helper = require("../utils/helper");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
-
+const mailer = require("../utils/mailer");
+var moment = require('moment');
+const min = config.forgotexpiry
+const forgotpasswordcontent = `<html><body><p><span style="background-color: #ccffff;"></span></p>
+<h1 style="color: #5e9ca0; text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use: #### as the OTP to reset your password</span> </span></h1>
+<p style="text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use #### as a&nbsp; OTP. It will be valid for next `+parseInt(min,10)+` mins. and try not to forget it next time ;)</span></span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p></body></html>`;
 router.get("/", function(req, res) {
   senduserdetails(req, (val) => {
     res.send(val);
@@ -11,12 +18,12 @@ router.get("/", function(req, res) {
 })
 
 router.post("/register", function(req, res) {
-  req.checkBody("password", "Password must contain a number.").isLength({
-    min: 5
-  }).matches(/\d/);
+  req.checkBody("password", "Password must be greater than 6  characters").isLength({
+    min: 6
+  });
   req.checkBody("username", "Enter a valid Username").isLength({
     min: 3
-  });
+  }).matches(/^[a-z]+$/i);
   var errors = req.validationErrors();
   if (errors) {
     res.send(errors);
@@ -29,12 +36,12 @@ router.post("/register", function(req, res) {
 })
 
 router.post("/login", function(req, res) {
-  req.checkBody("password", "Password must contain a number.").isLength({
-    min: 5
-  }).matches(/\d/);
+  req.checkBody("password","Password must be greater than 6  characters").isLength({
+    min: 6
+  })
   req.checkBody("username", "Enter a valid Username").isLength({
     min: 3
-  });
+  }).matches(/^[a-z]+$/i);
   var errors = req.validationErrors();
   if (errors) {
     res.send(errors);
@@ -45,6 +52,34 @@ router.post("/login", function(req, res) {
     });
   }
 })
+
+router.post("/initforgotpassword",function(req,res){
+   forgotpasswordinit(req.body, (val) => {
+      res.send(val);
+    });
+});
+
+router.post("/forgotpassword",function(req,res){
+  req.checkBody("otp","Please Provide the OTP").isLength({
+    min:4,
+    max:4
+  }).matches(/\d/);
+  req.checkBody("password", "Password must be greater than 6  characters").isLength({
+    min: 6
+  })
+  req.checkBody("confirm_password", "Password must be greater than 6  characters").isLength({
+    min: 6
+  })
+  var errors = req.validationErrors();
+  if (errors) {
+    res.send(errors);
+    return;
+  } else {
+    forgotpassword(req.body, (val) => {
+      res.send(val);
+    });
+  }
+});
 
 router.get("/logout", function(req, res) {
   var sessionkey = req.get("X-SESSION-KEY");
@@ -71,11 +106,7 @@ const senduserdetails = (req, callback) => {
     }
   }).then((val) => {
     val = val.dataValues;
-    delete val["createdAt"];
-    delete val["updatedAt"];
-    delete val["id"];
-    delete val["password"];
-    delete val["userkey"];
+    val=helper.clean(val,["createdAt","updatedAt","id","password","userkey","token"])
     callback({
       "error": false,
       "status": "SUCCESS",
@@ -154,5 +185,103 @@ const logout = (sessionkey, callback) => {
     });
   })
 }
+const forgotpasswordinit = (state,callback) =>{
+  models.User.findOne({
+    where: {
+      email: state.email,
+    }
+  }).then((val)=>{
+    if(val.dataValues.email == state.email){
+  const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+  const forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
+  const subject = "Please use: #### as the OTP to reset your diary password".replace(/####/g,otp)
+  mailer.sendmail(state.email,subject,forgotpasswordcontenttemp)
+   models.User.update({
+    "token": helper.gethash(otp)
+  }, {
+    where: {
+      "email": state.email
+    }
+  }).then((val)=>{
+    callback({
+      "error": false,
+      "status": "SUCCESS",
+      "message": "ForgotPassword Initiated"
+    })
+  }).catch((err)=>{
+    callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "ForgotPassword Initiatation failed"
+    })
+  })
+    }
+    else
+    {
+       callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "Email Doesnot exisit"
+    })
+    }
+}).catch((err)=>{
+    callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "Email Doesnot exisit"
+    })
+})
+}
 
+const forgotpassword = (state,callback) =>{
+    var now = moment();
+    const currentTime=now;
+    if(state.password === state.confirm_password){
+  models.User.findOne({where: {token:helper.gethash(state.otp)}}).then((val)=>{
+    val=val.dataValues;
+    let id=val.id;
+    var lastupdatetime=moment(val.updatedAt);
+    var duration = moment.duration(currentTime.diff(lastupdatetime));
+    var dif = duration.asMinutes()
+    if(dif>min)
+    {
+      models.User.update({token:null},{where:{id:id}})
+    callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "OTP Expired Please Regenrate an OTP"
+      })   
+    }
+    else
+    {
+      models.User.update({password:helper.gethash(state.password),token:null},{where:{id:id}}).then((val)=>{
+             callback({
+      "error": false,
+      "status": "SUCCESS",
+      "message": "password updated"
+      }).catch((err)=>{
+      callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "Something went wrong"
+    })   
+      })  
+      })
+    }
+}).catch((err)=>{
+     callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "Invalid OTP"
+    })
+});
+}
+else{
+     callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "Password Doesnot match"
+    })
+}
+}
 module.exports = router;

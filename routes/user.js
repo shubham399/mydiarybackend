@@ -105,7 +105,7 @@ const senduserdetails = (req, callback) => {
     }
   }).then((val) => {
     val = val.dataValues;
-    val=helper.clean(val,["createdAt","updatedAt","id","password","userkey"])
+    val=helper.clean(val,["createdAt","updatedAt","id","password","userkey","token"])
     callback({
       "error": false,
       "status": "SUCCESS",
@@ -236,12 +236,6 @@ const forgotpasswordinit = (state,callback) =>{
 const forgotpassword = (state,callback) =>{
   models.User.findOne({where: {token:state.otp}}).then((val)=>{
     val=val.dataValues;
-    const now = new Date();
-    console.log(now);
-    const epochTime = new Date(0);
-    console.log(epochTime);
-    const time =now.getTime()
-    console.log(time);
     callback({
       data:val
     })

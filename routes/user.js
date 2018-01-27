@@ -242,13 +242,15 @@ const forgotpassword = (state,callback) =>{
     let id=val.id;
     val=helper.clean(val,["createdAt","id","password","userkey","token"])
     const lastupdatetime=val.updatedAt;
-    let dif =(new Date(currentTime).getTime()) - (new Date(lastupdatetime).getTime())%100000
+    let diftime =(new Date(currentTime).getTime()) - (new Date(lastupdatetime).getTime())
+    let dif =(new Date(currentTime)) - (new Date(lastupdatetime))
     callback({
       "lastupdatetime":lastupdatetime,
       "lastupdatetimetime":(new Date(currentTime).getTime()),
       "currentTime":currentTime,
       "currentTimetime": (new Date(lastupdatetime).getTime()),
-      "time":dif
+      "time":dif,
+      "timetime":diftime
     })
     return;
     if(dif>min*100000)

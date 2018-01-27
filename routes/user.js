@@ -251,9 +251,8 @@ const forgotpassword = (state,callback) =>{
     callback({
       "error": true,
       "status": "FAILURE",
-      "message": "OTP Expired Please Regenrate an OTP",
-      "dif":dif
-    })   
+      "message": "OTP Expired Please Regenrate an OTP"
+      })   
     }
     else
     {

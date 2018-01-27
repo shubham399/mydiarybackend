@@ -1,9 +1,7 @@
 {
   "name": "mydiarybackend",
-  "scripts": {
-  },
-  "env": {
-  },
+  "scripts": {},
+  "env": {},
   "formation": {
     "web": {
       "quantity": 1
@@ -12,9 +10,7 @@
   "addons": [
 
   ],
-  "buildpacks": [
-    {
-      "url": "heroku/nodejs"
-    }
-  ]
+  "buildpacks": [{
+    "url": "heroku/nodejs"
+  }]
 }

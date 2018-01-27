@@ -1,10 +1,10 @@
 const router = require("express").Router();
 const diary = require("../services/diary")
 
-router.get("/",function(req,res){
-    diary.getall(req.body,(val)=>{
-        res.send(val);
-    })
+router.get("/", function(req, res) {
+  diary.getall(req.body, (val) => {
+    res.send(val);
+  })
 });
 
 router.get("/:id", function(req, res) {

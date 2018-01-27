@@ -5,6 +5,11 @@ const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 const mailer = require("../utils/mailer");
 
+const forgotpasswordcontent = `<html><body><p><span style="background-color: #ccffff;"></span></p>
+<h1 style="color: #5e9ca0; text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use: #### as the OTP to reset your password</span> </span></h1>
+<p style="text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use #### as a&nbsp; OTP. It will be valid for next 30mins. and try not to forget it next time ;)</span></span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p></body></html>`;
 router.get("/", function(req, res) {
   senduserdetails(req, (val) => {
     res.send(val);
@@ -168,10 +173,11 @@ const forgotpasswordinit = (state,callback) =>{
   }).then((val)=>{
     console.log(val.dataValues.email)
     if(val.dataValues.email == state.email){
-  const token = helper.gethash(helper.getuuid());
-  mailer.sendmail(state.email,"Reset Your Password","<html><body>Please Click on the Link to Reset your password :<a href='"+config.host+"/forgotpassword/"+token+"'>Click here</a> or copy the <b>URL</b> If it doesnot work "+config.host+"/forgotpassword/"+token+"</body></html>")
+  const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+  const forgotpasswordcontenttemp = forgotpasswordcontent.replace(" #### ",otp)
+  mailer.sendmail(state.email,"Reset Your Password",forgotpasswordcontenttemp)
    models.User.update({
-    "token": token
+    "token": otp
   }, {
     where: {
       "email": state.email

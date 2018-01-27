@@ -254,18 +254,7 @@ const forgotpassword = (state,callback) =>{
       "min":(moment(lastupdatetime).format()).toString().split("T")[1].split(":")[1]
     }
     let dif = currentTimestring.min - lastupdatestring.min;
-    callback({
-      "lastupdatetime":lastupdatetime,
-      "lastupdatetimetime":(new Date(currentTime).getTime()),
-      "currentTime":currentTime,
-      "currentTimetime": (new Date(lastupdatetime).getTime()),
-      "time":dif,
-      "lastupdatestring":lastupdatestring,
-      "currentTimeString":currentTimestring
-      
-    })
-    return;
-    if(dif>min*100000)
+    if(dif>min)
     {
       models.User.update({token:null},{where:{id:id}})
     callback({

@@ -6,11 +6,12 @@ const config = require("../config/config")[env];
 const mailer = require("../utils/mailer");
 var moment = require('moment');
 const min = config.forgotexpiry
-const forgotpasswordcontent = `<html><body><p><span style="background-color: #ccffff;"></span></p>
-<h1 style="color: #5e9ca0; text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use: #### as the OTP to reset your password</span> </span></h1>
-<p style="text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use #### as a&nbsp; OTP. It will be valid for next `+parseInt(min,10)+` mins. and try not to forget it next time ;)</span></span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p></body></html>`;
+const forgotpasswordcontent = `<!DOCTYPE html><html>
+  <body>
+<h2 style="font-size: 20px; font-weight: bold; margin: 0;">Reset Email Request</h2>
+<p>We received a request to reset the devRant password for username <strong>@@@@</strong>.Please use <strong>####</strong> as a OTP to Reset your password.Your OTP will expire in <strong>$$$$</strong> mins. If you didn't make this request, feel free to ignore this email.</p>
+  </body>
+</html>`;
 router.get("/", function(req, res) {
   senduserdetails(req, (val) => {
     res.send(val);
@@ -193,8 +194,10 @@ const forgotpasswordinit = (state,callback) =>{
   }).then((val)=>{
     if(val.dataValues.email == state.email){
   const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-  const forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
-  const subject = "Please use: #### as the OTP to reset your diary password".replace(/####/g,otp)
+  var forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
+  forgotpasswordcontenttemp =forgotpasswordcontenttemp.replace(/@@@@/,val.dataVaues.username)
+  forgotpasswordcontenttemp = forgotpasswordcontenttemp.replace(/$$$$/,min)
+  const subject = "Request to reset your myDiary password"
   mailer.sendmail(state.email,subject,forgotpasswordcontenttemp)
    models.User.update({
     "token": helper.gethash(otp)

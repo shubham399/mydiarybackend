@@ -25,7 +25,7 @@ router.post("/register", function(req, res) {
 })
 
 router.post("/login", function(req, res) {
-  req.checkBody("password","Password must be greater than 6  characters").isLength({
+  req.checkBody("password", "Password must be greater than 6  characters").isLength({
     min: 6
   })
   req.checkBody("username", "Enter a valid Username").isLength({
@@ -42,16 +42,16 @@ router.post("/login", function(req, res) {
   }
 })
 
-router.post("/initforgotpassword",function(req,res){
-   user.forgotpasswordinit(req.body, (val) => {
-      res.send(val);
-    });
+router.post("/initforgotpassword", function(req, res) {
+  user.forgotpasswordinit(req.body, (val) => {
+    res.send(val);
+  });
 });
 
-router.post("/forgotpassword",function(req,res){
-  req.checkBody("otp","Please Provide the OTP").isLength({
-    min:4,
-    max:4
+router.post("/forgotpassword", function(req, res) {
+  req.checkBody("otp", "Please Provide the OTP").isLength({
+    min: 4,
+    max: 4
   }).matches(/\d/);
   req.checkBody("password", "Password must be greater than 6  characters").isLength({
     min: 6

@@ -31,6 +31,7 @@
     "express-validator": "^4.3.0",
     "fs": "0.0.1-security",
     "helmet": "^3.9.0",
+    "moment": "^2.20.1",
     "nodemailer": "^4.4.2",
     "path": "^0.12.7",
     "pg": "^6.4.2",

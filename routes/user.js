@@ -238,14 +238,13 @@ const forgotpassword = (state,callback) =>{
     val=val.dataValues;
     const now = new Date();
     console.log(now);
-    const epochTime = new Date(0)
+    const epochTime = new Date(0);
+    console.log(epochTime);
     const time =now.getTime()
+    console.log(time);
     callback({
-      data:val,
-      now:now,
-      time:time,
-      epochTime: epochTime
-      })
+      data:val
+    })
 }).catch((err)=>{
      callback({
       "error": true,

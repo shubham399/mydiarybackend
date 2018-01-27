@@ -237,18 +237,32 @@ const forgotpasswordinit = (state,callback) =>{
 const forgotpassword = (state,callback) =>{
     var now = moment();
     const currentTime=now.format()
+    if(state.password === state.confirm_password){
   models.User.findOne({where: {token:state.otp}}).then((val)=>{
     val=val.dataValues;
+    let id=val.id;
     val=helper.clean(val,["createdAt","id","password","userkey","token"])
     const lastupdatetime=val.updatedAt;
     let dif =(new Date(currentTime)) -(new Date(lastupdatetime))
-   callback({
+    if(dif>30000)
+    {
+    callback({
       "error": true,
       "status": "FAILURE",
-      "data": val,
-      "currentTime":currentTime,
+      "message": "OTP Expired Please Regenrate an OTP",
       "dif":dif
-    })
+    })   
+    }
+    else
+    {
+      models.User.update({password:helper.gethash(state.password),token:null},{where:{id:id}}).then((val)=>{
+             callback({
+      "error": false,
+      "status": "SUCCESS",
+      "message": "password updated"
+      })  
+      })
+    }
 }).catch((err)=>{
      callback({
       "error": true,
@@ -256,5 +270,13 @@ const forgotpassword = (state,callback) =>{
       "message": "Invalid OTP"
     })
 });
+}
+else{
+     callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "Password Doesnot match"
+    })
+}
 }
 module.exports = router;

@@ -166,6 +166,7 @@ const forgotpasswordinit = (state,callback) =>{
       email: state.email,
     }
   }).then((val)=>{
+    console.log(val.dataValues.email)
     if(val.dataValues.email == state.email){
   const token = helper.gethash(helper.getuuid());
   mailer.sendmail(state.email,"Reset Your Password","<html><body>Please Click on the Link to Reset your password :<a href='"+config.host+"/forgotpassword/"+token+"'>Click here</a> or copy the <b>URL</b> If it doesnot work "+config.host+"/forgotpassword/"+token+"</body></html>")

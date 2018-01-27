@@ -15,7 +15,7 @@ const senduserdetails = (req, callback) => {
     }
   }).then((val) => {
     val = val.dataValues;
-    val=helper.clean(val,["createdAt","updatedAt","id","password","userkey","token"])
+    val = helper.clean(val, ["createdAt", "updatedAt", "id", "password", "userkey", "token"])
     callback({
       "error": false,
       "status": "SUCCESS",
@@ -94,109 +94,120 @@ const logout = (sessionkey, callback) => {
     });
   })
 }
-const forgotpasswordinit = (state,callback) =>{
+const forgotpasswordinit = (state, callback) => {
   models.User.findOne({
     where: {
       email: state.email,
     }
-  }).then((val)=>{
-    if(val.dataValues.email == state.email){
-  const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-  var forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
-  forgotpasswordcontenttemp =forgotpasswordcontenttemp.replace(/@@@@/,val.dataValues.username)
-  forgotpasswordcontenttemp = forgotpasswordcontenttemp.replace(/%%%%/,min)
-  const subject = "Request to reset your myDiary password"
-  mailer.sendmail(state.email,subject,forgotpasswordcontenttemp)
-   models.User.update({
-    "token": crypto.gethash(otp)
-  }, {
-    where: {
-      "email": state.email
-    }
-  }).then((val)=>{
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "ForgotPassword Initiated"
-    })
-  }).catch((err)=>{
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "ForgotPassword Initiatation failed"
-    })
-  })
-    }
-    else
-    {
-       callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Email Doesnot exisit"
-    })
-    }
-}).catch((err)=>{
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Email Doesnot exisit"
-    })
-})
-}
-
-const forgotpassword = (state,callback) =>{
-    var now = moment();
-    const currentTime=now;
-    if(state.password === state.confirm_password){
-  models.User.findOne({where: {token:crypto.gethash(state.otp)}}).then((val)=>{
-    val=val.dataValues;
-    let id=val.id;
-    var lastupdatetime=moment(val.updatedAt);
-    var duration = moment.duration(currentTime.diff(lastupdatetime));
-    var dif = duration.asMinutes()
-    if(dif>min)
-    {
-      models.User.update({token:null},{where:{id:id}})
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "OTP Expired Please Regenrate an OTP"
-      })   
-    }
-    else
-    {
-      models.User.update({password:crypto.gethash(state.password),token:null},{where:{id:id}}).then((val)=>{
-             callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "password updated"
-      }).catch((err)=>{
+  }).then((val) => {
+    if (val.dataValues.email == state.email) {
+      const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+      var forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g, otp)
+      forgotpasswordcontenttemp = forgotpasswordcontenttemp.replace(/@@@@/, val.dataValues.username)
+      forgotpasswordcontenttemp = forgotpasswordcontenttemp.replace(/%%%%/, min)
+      const subject = "Request to reset your myDiary password"
+      mailer.sendmail(state.email, subject, forgotpasswordcontenttemp)
+      models.User.update({
+        "token": crypto.gethash(otp)
+      }, {
+        where: {
+          "email": state.email
+        }
+      }).then((val) => {
+        callback({
+          "error": false,
+          "status": "SUCCESS",
+          "message": "ForgotPassword Initiated"
+        })
+      }).catch((err) => {
+        callback({
+          "error": true,
+          "status": "FAILURE",
+          "message": "ForgotPassword Initiatation failed"
+        })
+      })
+    } else {
       callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Something went wrong"
-    })   
-      })  
+        "error": true,
+        "status": "FAILURE",
+        "message": "Email Doesnot exisit"
       })
     }
-}).catch((err)=>{
-     callback({
+  }).catch((err) => {
+    callback({
       "error": true,
       "status": "FAILURE",
-      "message": "Invalid OTP"
+      "message": "Email Doesnot exisit"
     })
-});
+  })
 }
-else{
-     callback({
+
+const forgotpassword = (state, callback) => {
+  var now = moment();
+  const currentTime = now;
+  if (state.password === state.confirm_password) {
+    models.User.findOne({
+      where: {
+        token: crypto.gethash(state.otp)
+      }
+    }).then((val) => {
+      val = val.dataValues;
+      let id = val.id;
+      var lastupdatetime = moment(val.updatedAt);
+      var duration = moment.duration(currentTime.diff(lastupdatetime));
+      var dif = duration.asMinutes()
+      if (dif > min) {
+        models.User.update({
+          token: null
+        }, {
+          where: {
+            id: id
+          }
+        })
+        callback({
+          "error": true,
+          "status": "FAILURE",
+          "message": "OTP Expired Please Regenrate an OTP"
+        })
+      } else {
+        models.User.update({
+          password: crypto.gethash(state.password),
+          token: null
+        }, {
+          where: {
+            id: id
+          }
+        }).then((val) => {
+          callback({
+            "error": false,
+            "status": "SUCCESS",
+            "message": "password updated"
+          }).catch((err) => {
+            callback({
+              "error": true,
+              "status": "FAILURE",
+              "message": "Something went wrong"
+            })
+          })
+        })
+      }
+    }).catch((err) => {
+      callback({
+        "error": true,
+        "status": "FAILURE",
+        "message": "Invalid OTP"
+      })
+    });
+  } else {
+    callback({
       "error": true,
       "status": "FAILURE",
       "message": "Password Doesnot match"
     })
-}
+  }
 }
 exports.senduserdetails = senduserdetails;
-exports.login =login;
+exports.login = login;
 exports.logout = logout;
 exports.register = register;
 exports.forgotpassword = forgotpassword;

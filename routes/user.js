@@ -241,12 +241,12 @@ const forgotpassword = (state,callback) =>{
     val=val.dataValues;
     let id=val.id;
     val=helper.clean(val,["createdAt","id","password","userkey","token"])
-    const lastupdatetime=moment(val.updatedAt).format();
-    
-    let dif = moment.duration(currentTime.diff(lastupdatetime));
+    var lastupdatetime=moment(val.updatedAt).format();
+    var dif ="15151515"
+    //var dif = moment.duration(currentTime.diff(lastupdatetime));
     callback({
-      "dif":dif,
-      "asmins":dif.asMinutes()
+      "dif":dif
+      // "asmins":dif.asMinutes()
     })
     return
     if(dif>min)

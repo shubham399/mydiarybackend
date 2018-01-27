@@ -8,5 +8,12 @@ const gethash=(message) =>{
     return hash.update(message).digest("base64");
 }
 
+const cleanrecord = (rec,cleankeys) =>
+{
+    for(i of cleankeys)
+        delete rec[i];
+    return rec;
+}
 exports.getuuid = getuuid;
 exports.gethash = gethash;
+exports.clean = cleanrecord;

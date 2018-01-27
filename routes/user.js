@@ -17,12 +17,12 @@ router.get("/", function(req, res) {
 })
 
 router.post("/register", function(req, res) {
-  req.checkBody("password", "Password must contain a number.").isLength({
+  req.checkBody("password", "Password must be greater than 6  characters").isLength({
     min: 5
-  }).matches(/\d/);
+  }).matches(/^(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*$/i);
   req.checkBody("username", "Enter a valid Username").isLength({
     min: 3
-  });
+  }).matches(/^[a-z]+$/i);
   var errors = req.validationErrors();
   if (errors) {
     res.send(errors);
@@ -35,12 +35,12 @@ router.post("/register", function(req, res) {
 })
 
 router.post("/login", function(req, res) {
-  req.checkBody("password", "Password must contain a number.").isLength({
+  req.checkBody("password","Password must be greater than 6  characters").isLength({
     min: 5
-  }).matches(/\d/);
+  }).matches(/^(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*$/i);
   req.checkBody("username", "Enter a valid Username").isLength({
     min: 3
-  });
+  }).matches(/^[a-z]+$/i);
   var errors = req.validationErrors();
   if (errors) {
     res.send(errors);
@@ -52,11 +52,34 @@ router.post("/login", function(req, res) {
   }
 })
 
-router.post("/forgotpassword",function(req,res){
+router.post("/initforgotpassword",function(req,res){
    forgotpasswordinit(req.body, (val) => {
       res.send(val);
     });
 });
+
+router.post("/forgotpassword",function(req,res){
+  req.checkBody("otp","Please Provide the OTP").isLength({
+    min:4,
+    max:4
+  }).matches(/\d/);
+  req.checkBody("password", "Password must be greater than 6  characters").isLength({
+    min: 6
+  })
+  req.checkBody("confirm_password", "Password must be greater than 6  characters").isLength({
+    min: 6
+  })
+  var errors = req.validationErrors();
+  if (errors) {
+    res.send(errors);
+    return;
+  } else {
+    forgotpassword(req.body, (val) => {
+      res.send(val);
+    });
+  }
+});
+
 router.get("/logout", function(req, res) {
   var sessionkey = req.get("X-SESSION-KEY");
   var errors = req.validationErrors();
@@ -82,11 +105,7 @@ const senduserdetails = (req, callback) => {
     }
   }).then((val) => {
     val = val.dataValues;
-    delete val["createdAt"];
-    delete val["updatedAt"];
-    delete val["id"];
-    delete val["password"];
-    delete val["userkey"];
+    val=helper.clean(val,["createdAt","updatedAt","id","password","userkey"])
     callback({
       "error": false,
       "status": "SUCCESS",
@@ -214,4 +233,22 @@ const forgotpasswordinit = (state,callback) =>{
 })
 }
 
+const forgotpassword = (state,callback) =>{
+  models.User.findOne({where: {token:state.otp}}).then((val)=>{
+    val=val.dataValues;
+    const now = new Date();
+    callback({
+      data:val,
+      now:now,
+      time:now.getTime(),
+      epochTime: new Date(0)
+      })
+}).catch((err)=>{
+     callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "Invalid OTP"
+    })
+});
+}
 module.exports = router;

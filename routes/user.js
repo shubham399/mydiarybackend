@@ -237,7 +237,7 @@ const forgotpassword = (state,callback) =>{
     val=val.dataValues;
        val=helper.clean(val,["createdAt","updatedAt","id","password","userkey","token"])
     callback({
-      data:"this is just a test"
+      "data":"this is just a test"
     })
 }).catch((err)=>{
      callback({

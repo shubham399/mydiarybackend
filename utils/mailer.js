@@ -14,7 +14,7 @@ const nodemailer = require('nodemailer');
     
 const sendmail = (to,subject,message)=>{
         let mailOptions = {
-        from: 'noreply@midiaries.cf', // sender address
+        from: 'noreply@mydiaries.cf', // sender address
         to: to, // list of receivers
         subject: subject, // Subject line
         html: message // html body

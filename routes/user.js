@@ -244,7 +244,7 @@ const forgotpassword = (state,callback) =>{
     val=helper.clean(val,["createdAt","id","password","userkey","token"])
     const lastupdatetime=val.updatedAt;
     let dif =(new Date(currentTime)) -(new Date(lastupdatetime))
-    if(dif>30000)
+    if(dif>3000000)
     {
       models.User.update({token:null},{where:{id:id}})
     callback({

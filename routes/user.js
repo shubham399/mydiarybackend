@@ -132,7 +132,7 @@ const senduserdetails = (req, callback) => {
 
 const register = (state, callback) => {
   state["userkey"] = helper.getuuid();
-  state.password = helper.gethash(state.password);
+  state.password = crypto.gethash(state.password);
   models.User.create(state).then((val) => {
     callback({
       "error": false,
@@ -150,7 +150,7 @@ const register = (state, callback) => {
 }
 
 const login = (state, callback) => {
-  state.password = helper.gethash(state.password);
+  state.password = crypto.gethash(state.password);
   models.User.findOne({
     where: {
       username: state.username,
@@ -208,7 +208,7 @@ const forgotpasswordinit = (state,callback) =>{
   const subject = "Request to reset your myDiary password"
   mailer.sendmail(state.email,subject,forgotpasswordcontenttemp)
    models.User.update({
-    "token": helper.gethash(otp)
+    "token": crypto.gethash(otp)
   }, {
     where: {
       "email": state.email
@@ -248,7 +248,7 @@ const forgotpassword = (state,callback) =>{
     var now = moment();
     const currentTime=now;
     if(state.password === state.confirm_password){
-  models.User.findOne({where: {token:helper.gethash(state.otp)}}).then((val)=>{
+  models.User.findOne({where: {token:crypto.gethash(state.otp)}}).then((val)=>{
     val=val.dataValues;
     let id=val.id;
     var lastupdatetime=moment(val.updatedAt);
@@ -265,7 +265,7 @@ const forgotpassword = (state,callback) =>{
     }
     else
     {
-      models.User.update({password:helper.gethash(state.password),token:null},{where:{id:id}}).then((val)=>{
+      models.User.update({password:crypto.gethash(state.password),token:null},{where:{id:id}}).then((val)=>{
              callback({
       "error": false,
       "status": "SUCCESS",

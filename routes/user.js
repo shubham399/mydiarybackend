@@ -245,7 +245,9 @@ const forgotpassword = (state,callback) =>{
     let dif =(new Date(currentTime).getTime()) - (new Date(lastupdatetime).getTime())%100000
     callback({
       "lastupdatetime":lastupdatetime,
+      "lastupdatetimetime":(new Date(currentTime).getTime()),
       "currentTime":currentTime,
+      "currentTimetime": (new Date(lastupdatetime).getTime()),
       "time":dif
     })
     return;

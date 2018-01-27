@@ -234,10 +234,12 @@ const forgotpasswordinit = (state,callback) =>{
 
 const forgotpassword = (state,callback) =>{
   models.User.findOne({where: {token:state.otp}}).then((val)=>{
-    val=val.dataValues;
-       val=helper.clean(val,["createdAt","updatedAt","id","password","userkey","token"])
-    callback({
-      "data":"this is just a test"
+    //val=val.dataValues;
+       //val=helper.clean(val,["createdAt","updatedAt","id","password","userkey","token"])
+   callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "Reaching here"
     })
 }).catch((err)=>{
      callback({

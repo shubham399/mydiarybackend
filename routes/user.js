@@ -237,11 +237,13 @@ const forgotpassword = (state,callback) =>{
   models.User.findOne({where: {token:state.otp}}).then((val)=>{
     val=val.dataValues;
     const now = new Date();
+    const epochTime = new Date(0)
+    const time =now.getTime()
     callback({
       data:val,
       now:now,
-      time:now.getTime(),
-      epochTime: new Date(0)
+      time:time,
+      epochTime: epochTime
       })
 }).catch((err)=>{
      callback({

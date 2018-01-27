@@ -241,7 +241,7 @@ const forgotpassword = (state,callback) =>{
     val=val.dataValues;
     let id=val.id;
     val=helper.clean(val,["createdAt","id","password","userkey","token"])
-    const lastupdatetime=val.updatedAt;
+    const lastupdatetime=moment(val.updatedAt);
     let dif =moment(moment.duration(currentTime.diff(lastupdatetime))).format("mm")
     callback({
       "time":dif

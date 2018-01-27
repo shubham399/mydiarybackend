@@ -236,24 +236,19 @@ const forgotpasswordinit = (state,callback) =>{
 const forgotpassword = (state,callback) =>{
     var now = moment();
     const currentTime=now.format();
-      const currentTimestring= {
-      "date":currentTime.toString().split("T")[0],
-      "hour":currentTime.toString().split("T")[1].split(":")[0],
-      "min":currentTime.toString().split("T")[1].split(":")[1]
-    }
     if(state.password === state.confirm_password){
   models.User.findOne({where: {token:state.otp}}).then((val)=>{
     val=val.dataValues;
     let id=val.id;
     val=helper.clean(val,["createdAt","id","password","userkey","token"])
-    const lastupdatetime=val.updatedAt;
-    const lastupdatestring= {
-      
-      "date":(moment(lastupdatetime).format()).toString().split("T")[0],
-      "hour":(moment(lastupdatetime).format()).toString().split("T")[1].split(":")[0],
-      "min":(moment(lastupdatetime).format()).toString().split("T")[1].split(":")[1]
-    }
-    let dif = currentTimestring.min - lastupdatestring.min;
+    const lastupdatetime=moment(val.updatedAt).format();
+    
+    let dif = moment.duration(currentTime.diff(lastupdatetime));
+    callback({
+      "dif":dif,
+      "asmins":dif.asMinutes()
+    })
+    return
     if(dif>min)
     {
       models.User.update({token:null},{where:{id:id}})

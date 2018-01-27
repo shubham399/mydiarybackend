@@ -244,8 +244,11 @@ const forgotpassword = (state,callback) =>{
     const lastupdatetime=val.updatedAt;
     let dif =(new Date(currentTime).getTime()) - (new Date(lastupdatetime).getTime())%100000
     callback({
+      "lastupdatetime":lastupdatetime,
+      "currentTime":currentTime,
       "time":dif
     })
+    return;
     if(dif>min*100000)
     {
       models.User.update({token:null},{where:{id:id}})

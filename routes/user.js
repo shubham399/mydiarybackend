@@ -20,8 +20,8 @@ router.get("/", function(req, res) {
 
 router.post("/register", function(req, res) {
   req.checkBody("password", "Password must be greater than 6  characters").isLength({
-    min: 5
-  }).matches(/^(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*$/i);
+    min: 6
+  });
   req.checkBody("username", "Enter a valid Username").isLength({
     min: 3
   }).matches(/^[a-z]+$/i);
@@ -38,8 +38,8 @@ router.post("/register", function(req, res) {
 
 router.post("/login", function(req, res) {
   req.checkBody("password","Password must be greater than 6  characters").isLength({
-    min: 5
-  }).matches(/^(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*$/i);
+    min: 6
+  })
   req.checkBody("username", "Enter a valid Username").isLength({
     min: 3
   }).matches(/^[a-z]+$/i);

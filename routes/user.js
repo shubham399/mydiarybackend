@@ -5,11 +5,10 @@ const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 const mailer = require("../utils/mailer");
 var moment = require('moment');
-const min = 2;
-
+const min = config.forgotexpiry
 const forgotpasswordcontent = `<html><body><p><span style="background-color: #ccffff;"></span></p>
 <h1 style="color: #5e9ca0; text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use: #### as the OTP to reset your password</span> </span></h1>
-<p style="text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use #### as a&nbsp; OTP. It will be valid for next 30mins. and try not to forget it next time ;)</span></span></p>
+<p style="text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use #### as a&nbsp; OTP. It will be valid for next `+min+`mins. and try not to forget it next time ;)</span></span></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p></body></html>`;
 router.get("/", function(req, res) {

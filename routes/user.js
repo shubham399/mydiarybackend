@@ -1,16 +1,25 @@
 const router = require("express").Router();
 const models = require('../models');
 const helper = require("../utils/helper");
+const crypto = require("../utils/crypto");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 const mailer = require("../utils/mailer");
 var moment = require('moment');
 const min = config.forgotexpiry
-const forgotpasswordcontent = `<html><body><p><span style="background-color: #ccffff;"></span></p>
-<h1 style="color: #5e9ca0; text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use: #### as the OTP to reset your password</span> </span></h1>
-<p style="text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use #### as a&nbsp; OTP. It will be valid for next `+parseInt(min,10)+` mins. and try not to forget it next time ;)</span></span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p></body></html>`;
+const forgotpasswordcontent = `<!DOCTYPE html><html><head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+<h2 style="font-size: 20px; font-weight: bold; margin: 0;">Reset Email Request</h2>
+<p>We received a request to reset the myDiary password for username <strong>@@@@</strong>.</p>
+<p>Please use <strong>####</strong> as a OTP to Reset your password.Your OTP will expire in <strong>%%%% </strong>mins.</p>
+<p>Try to Remember your password next time ;) well incase you forgot we got you covered</p>
+<p>If you didn't make this request, feel free to ignore this email.</p>
+</div>
+  </body>
+</html>`;
 router.get("/", function(req, res) {
   senduserdetails(req, (val) => {
     res.send(val);
@@ -123,7 +132,7 @@ const senduserdetails = (req, callback) => {
 
 const register = (state, callback) => {
   state["userkey"] = helper.getuuid();
-  state.password = helper.gethash(state.password);
+  state.password = crypto.gethash(state.password);
   models.User.create(state).then((val) => {
     callback({
       "error": false,
@@ -141,7 +150,7 @@ const register = (state, callback) => {
 }
 
 const login = (state, callback) => {
-  state.password = helper.gethash(state.password);
+  state.password = crypto.gethash(state.password);
   models.User.findOne({
     where: {
       username: state.username,
@@ -193,11 +202,13 @@ const forgotpasswordinit = (state,callback) =>{
   }).then((val)=>{
     if(val.dataValues.email == state.email){
   const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-  const forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
-  const subject = "Please use: #### as the OTP to reset your diary password".replace(/####/g,otp)
+  var forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
+  forgotpasswordcontenttemp =forgotpasswordcontenttemp.replace(/@@@@/,val.dataValues.username)
+  forgotpasswordcontenttemp = forgotpasswordcontenttemp.replace(/%%%%/,min)
+  const subject = "Request to reset your myDiary password"
   mailer.sendmail(state.email,subject,forgotpasswordcontenttemp)
    models.User.update({
-    "token": helper.gethash(otp)
+    "token": crypto.gethash(otp)
   }, {
     where: {
       "email": state.email
@@ -237,7 +248,7 @@ const forgotpassword = (state,callback) =>{
     var now = moment();
     const currentTime=now;
     if(state.password === state.confirm_password){
-  models.User.findOne({where: {token:helper.gethash(state.otp)}}).then((val)=>{
+  models.User.findOne({where: {token:crypto.gethash(state.otp)}}).then((val)=>{
     val=val.dataValues;
     let id=val.id;
     var lastupdatetime=moment(val.updatedAt);
@@ -254,7 +265,7 @@ const forgotpassword = (state,callback) =>{
     }
     else
     {
-      models.User.update({password:helper.gethash(state.password),token:null},{where:{id:id}}).then((val)=>{
+      models.User.update({password:crypto.gethash(state.password),token:null},{where:{id:id}}).then((val)=>{
              callback({
       "error": false,
       "status": "SUCCESS",

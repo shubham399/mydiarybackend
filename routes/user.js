@@ -235,15 +235,19 @@ const forgotpasswordinit = (state,callback) =>{
 }
 
 const forgotpassword = (state,callback) =>{
+    var now = moment();
+    const currentTime=now.format()
   models.User.findOne({where: {token:state.otp}}).then((val)=>{
     val=val.dataValues;
     val=helper.clean(val,["createdAt","id","password","userkey","token"])
-    var now = moment();
+    const lastupdatetime=val.updatedAt;
+    let dif =(new Date(currentTime).getTime()) -(new Date(lastupdatetime).getTime())
    callback({
       "error": true,
       "status": "FAILURE",
       "data": val,
-      "time":now.format('YYYY-MM-DD HH:mm:ss Z')
+      "currentTime":currentTime,
+      "dif":dif
     })
 }).catch((err)=>{
      callback({

@@ -166,7 +166,7 @@ const getone = (state, callback) => {
       });
     val = val.dataValues;
     val.note = crypto.decrypt(val.note,val.UserId);
-    // val = helper.clean(val,["createdAt","updateAt","userId"])
+    val = helper.clean(val,["createdAt","updateAt","UserId"])
     callback({
       "error": false,
       "data": val

@@ -135,9 +135,9 @@ const getall = (state, callback) => {
     }
   }).then((val) => {
     val = val.map(function(x) {
-      x = x.dataValues;
-      x.note = crypto.decrypt(x.note,x.userId);
-      x = helper.clean(x,["createdAt","updateAt","userId"])
+    x = x.dataValues;
+    x.note = crypto.decrypt(x.note,x.UserId);
+    x = helper.clean(x,["createdAt","updatedAt","UserId"])
     })
     callback({
       "error": false,
@@ -166,7 +166,7 @@ const getone = (state, callback) => {
       });
     val = val.dataValues;
     val.note = crypto.decrypt(val.note,val.UserId);
-    val = helper.clean(val,["createdAt","updateAt","UserId"])
+    val = helper.clean(val,["createdAt","updatedAt","UserId"])
     callback({
       "error": false,
       "data": val

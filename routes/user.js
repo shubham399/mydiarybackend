@@ -1,27 +1,7 @@
 const router = require("express").Router();
-const models = require('../models');
-const helper = require("../utils/helper");
-const crypto = require("../utils/crypto");
-const env = process.env.NODE_ENV || 'development';
-const config = require("../config/config")[env];
-const mailer = require("../utils/mailer");
-var moment = require('moment');
-const min = config.forgotexpiry
-const forgotpasswordcontent = `<!DOCTYPE html><html><head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body>
-<div class="container">
-<h2 style="font-size: 20px; font-weight: bold; margin: 0;">Reset Email Request</h2>
-<p>We received a request to reset the myDiary password for username <strong>@@@@</strong>.</p>
-<p>Please use <strong>####</strong> as a OTP to Reset your password.Your OTP will expire in <strong>%%%% </strong>mins.</p>
-<p>Try to Remember your password next time ;) well incase you forgot we got you covered</p>
-<p>If you didn't make this request, feel free to ignore this email.</p>
-</div>
-  </body>
-</html>`;
+const user = require("../services/users")
 router.get("/", function(req, res) {
-  senduserdetails(req, (val) => {
+  user.senduserdetails(req, (val) => {
     res.send(val);
   })
 })
@@ -38,7 +18,7 @@ router.post("/register", function(req, res) {
     res.send(errors);
     return;
   } else {
-    register(req.body, (val) => {
+    user.register(req.body, (val) => {
       res.send(val);
     });
   }
@@ -56,14 +36,14 @@ router.post("/login", function(req, res) {
     res.send(errors);
     return;
   } else {
-    login(req.body, (val) => {
+    user.login(req.body, (val) => {
       res.send(val);
     });
   }
 })
 
 router.post("/initforgotpassword",function(req,res){
-   forgotpasswordinit(req.body, (val) => {
+   user.forgotpasswordinit(req.body, (val) => {
       res.send(val);
     });
 });
@@ -84,7 +64,7 @@ router.post("/forgotpassword",function(req,res){
     res.send(errors);
     return;
   } else {
-    forgotpassword(req.body, (val) => {
+    user.forgotpassword(req.body, (val) => {
       res.send(val);
     });
   }
@@ -101,198 +81,10 @@ router.get("/logout", function(req, res) {
     });
     return;
   } else {
-    logout(sessionkey, (val) => {
+    user.logout(sessionkey, (val) => {
       res.send(val);
     });
   }
 })
 
-const senduserdetails = (req, callback) => {
-  const session = req.get('X-SESSION-KEY');
-  models.User.findOne({
-    where: {
-      userkey: session
-    }
-  }).then((val) => {
-    val = val.dataValues;
-    val=helper.clean(val,["createdAt","updatedAt","id","password","userkey","token"])
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "data": val
-    });
-  }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "Login to View User Details"
-    });
-  })
-}
-
-const register = (state, callback) => {
-  state["userkey"] = helper.getuuid();
-  state.password = crypto.gethash(state.password);
-  models.User.create(state).then((val) => {
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "desc": "User Register Successfully",
-      "SESSION_KEY": val.dataValues.userkey
-    })
-  }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "Something Went Wrong"
-    });
-  })
-}
-
-const login = (state, callback) => {
-  state.password = crypto.gethash(state.password);
-  models.User.findOne({
-    where: {
-      username: state.username,
-      password: state.password
-    }
-  }).then((val) => {
-
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "SESSION_KEY": val.dataValues.userkey
-    })
-  }).catch((err) => {
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Invalid Username or Password"
-    });
-  })
-}
-
-const logout = (sessionkey, callback) => {
-  models.User.update({
-    "userkey": helper.getuuid()
-  }, {
-    where: {
-      "userkey": sessionkey
-    }
-  }).then((val) => {
-
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "LoggedOut Successful"
-    })
-  }).catch((err) => {
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Something Went Wrong"
-    });
-  })
-}
-const forgotpasswordinit = (state,callback) =>{
-  models.User.findOne({
-    where: {
-      email: state.email,
-    }
-  }).then((val)=>{
-    if(val.dataValues.email == state.email){
-  const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-  var forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
-  forgotpasswordcontenttemp =forgotpasswordcontenttemp.replace(/@@@@/,val.dataValues.username)
-  forgotpasswordcontenttemp = forgotpasswordcontenttemp.replace(/%%%%/,min)
-  const subject = "Request to reset your myDiary password"
-  mailer.sendmail(state.email,subject,forgotpasswordcontenttemp)
-   models.User.update({
-    "token": crypto.gethash(otp)
-  }, {
-    where: {
-      "email": state.email
-    }
-  }).then((val)=>{
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "ForgotPassword Initiated"
-    })
-  }).catch((err)=>{
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "ForgotPassword Initiatation failed"
-    })
-  })
-    }
-    else
-    {
-       callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Email Doesnot exisit"
-    })
-    }
-}).catch((err)=>{
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Email Doesnot exisit"
-    })
-})
-}
-
-const forgotpassword = (state,callback) =>{
-    var now = moment();
-    const currentTime=now;
-    if(state.password === state.confirm_password){
-  models.User.findOne({where: {token:crypto.gethash(state.otp)}}).then((val)=>{
-    val=val.dataValues;
-    let id=val.id;
-    var lastupdatetime=moment(val.updatedAt);
-    var duration = moment.duration(currentTime.diff(lastupdatetime));
-    var dif = duration.asMinutes()
-    if(dif>min)
-    {
-      models.User.update({token:null},{where:{id:id}})
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "OTP Expired Please Regenrate an OTP"
-      })   
-    }
-    else
-    {
-      models.User.update({password:crypto.gethash(state.password),token:null},{where:{id:id}}).then((val)=>{
-             callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "password updated"
-      }).catch((err)=>{
-      callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Something went wrong"
-    })   
-      })  
-      })
-    }
-}).catch((err)=>{
-     callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Invalid OTP"
-    })
-});
-}
-else{
-     callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Password Doesnot match"
-    })
-}
-}
 module.exports = router;

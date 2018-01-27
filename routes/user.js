@@ -247,7 +247,8 @@ const forgotpassword = (state,callback) =>{
     // var dif = moment.duration(currentTime.diff(lastupdatetime));
     callback({
       "dif":dif,
-      "duration":lastupdatetime
+      "duration":lastupdatetime,
+      "currentTime":currentTime
       // "asmins":dif.asMinutes()
     })
     return

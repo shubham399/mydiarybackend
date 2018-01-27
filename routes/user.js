@@ -174,8 +174,9 @@ const forgotpasswordinit = (state,callback) =>{
     console.log(val.dataValues.email)
     if(val.dataValues.email == state.email){
   const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-  const forgotpasswordcontenttemp = forgotpasswordcontent.replace(" #### ",otp)
-  mailer.sendmail(state.email,"Reset Your Password",forgotpasswordcontenttemp)
+  const forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
+  const subject = "Please use: #### as the OTP to reset your diary password".replace(/####/g,otp)
+  mailer.sendmail(state.email,subject,forgotpasswordcontenttemp)
    models.User.update({
     "token": otp
   }, {

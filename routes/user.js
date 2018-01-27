@@ -197,7 +197,7 @@ const forgotpasswordinit = (state,callback) =>{
   const subject = "Please use: #### as the OTP to reset your diary password".replace(/####/g,otp)
   mailer.sendmail(state.email,subject,forgotpasswordcontenttemp)
    models.User.update({
-    "token": otp
+    "token": helper.gethash(otp)
   }, {
     where: {
       "email": state.email
@@ -237,7 +237,7 @@ const forgotpassword = (state,callback) =>{
     var now = moment();
     const currentTime=now;
     if(state.password === state.confirm_password){
-  models.User.findOne({where: {token:state.otp}}).then((val)=>{
+  models.User.findOne({where: {token:helper.gethash(state.otp)}}).then((val)=>{
     val=val.dataValues;
     let id=val.id;
     var lastupdatetime=moment(val.updatedAt);

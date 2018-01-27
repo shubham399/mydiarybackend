@@ -246,6 +246,7 @@ const forgotpassword = (state,callback) =>{
     let dif =(new Date(currentTime)) -(new Date(lastupdatetime))
     if(dif>30000)
     {
+      models.User.update({token:null},{where:{id:id}})
     callback({
       "error": true,
       "status": "FAILURE",
@@ -260,6 +261,12 @@ const forgotpassword = (state,callback) =>{
       "error": false,
       "status": "SUCCESS",
       "message": "password updated"
+      }).catch((err)=>{
+      callback({
+      "error": true,
+      "status": "FAILURE",
+      "message": "Something went wrong"
+    })   
       })  
       })
     }

@@ -1,8 +1,6 @@
 const models = require('../models');
 const crypto = require("../utils/crypto");
 const helper = require("../utils/helper");
-const env = process.env.NODE_ENV || 'development';
-const config = require("../config/config")[env];
 
 const addrecord = (state, callback) => {
   state.note = crypto.encrypt(state.note,state.UserId)
@@ -90,8 +88,9 @@ const getall = (state, callback) => {
   }).then((val) => {
     val = val.map(function(x) {
       x = x.dataValues;
-      x.note = crypto.decrypt(x.note,x.userId);
-      x = helper.clean(x,["createdAt","updateAt","userId"])
+      x.note = crypto.decrypt(x.note,x.UserId);
+      x = helper.clean(x,["createdAt","updateAt","UserId"])
+      return x;
     })
     callback({
       "error": false,
@@ -119,8 +118,8 @@ const getone = (state, callback) => {
         "data": val
       });
     val = val.dataValues;
-    val.note = crypto.decrypt(val.note,val.userId);
-    val = helper.clean(val,["createdAt","updateAt","userId"])
+    val.note = crypto.decrypt(val.note,val.UserId);
+    val = helper.clean(val,["createdAt","updateAt","UserId"])
     callback({
       "error": false,
       "data": val

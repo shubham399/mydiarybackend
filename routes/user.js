@@ -240,7 +240,6 @@ const forgotpassword = (state,callback) =>{
   models.User.findOne({where: {token:state.otp}}).then((val)=>{
     val=val.dataValues;
     let id=val.id;
-    val=helper.clean(val,["createdAt","id","password","userkey","token"])
     var lastupdatetime=moment(val.updatedAt);
     var duration = moment.duration(currentTime.diff(lastupdatetime));
     var dif = duration.asMinutes()

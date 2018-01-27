@@ -9,7 +9,7 @@ const min = config.forgotexpiry
 const forgotpasswordcontent = `<!DOCTYPE html><html>
   <body>
 <h2 style="font-size: 20px; font-weight: bold; margin: 0;">Reset Email Request</h2>
-<p>We received a request to reset the devRant password for username <strong>@@@@</strong>.Please use <strong>####</strong> as a OTP to Reset your password.Your OTP will expire in <strong>$$$$</strong> mins. If you didn't make this request, feel free to ignore this email.</p>
+<p>We received a request to reset the devRant password for username <strong>@@@@</strong>.Please use <strong>####</strong> as a OTP to Reset your password.Your OTP will expire in <strong>$$$$</strong> mins. If you didn't make this request, feel free to ignore this email.Try to Remember your password next time ;),well incase you forgot we got you covered</p>
   </body>
 </html>`;
 router.get("/", function(req, res) {

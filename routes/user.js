@@ -4,6 +4,7 @@ const helper = require("../utils/helper");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 const mailer = require("../utils/mailer");
+var now = moment();
 
 const forgotpasswordcontent = `<html><body><p><span style="background-color: #ccffff;"></span></p>
 <h1 style="color: #5e9ca0; text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use: #### as the OTP to reset your password</span> </span></h1>
@@ -234,12 +235,13 @@ const forgotpasswordinit = (state,callback) =>{
 
 const forgotpassword = (state,callback) =>{
   models.User.findOne({where: {token:state.otp}}).then((val)=>{
-    //val=val.dataValues;
-       //val=helper.clean(val,["createdAt","updatedAt","id","password","userkey","token"])
+    val=val.dataValues;
+    val=helper.clean(val,["createdAt","id","password","userkey","token"])
    callback({
       "error": true,
       "status": "FAILURE",
-      "message": "Reaching here"
+      "data": val,
+      "time":now.format('YYYY-MM-DD HH:mm:ss Z')
     })
 }).catch((err)=>{
      callback({

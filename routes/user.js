@@ -8,7 +8,7 @@ var moment = require('moment');
 const min = config.forgotexpiry
 const forgotpasswordcontent = `<html><body><p><span style="background-color: #ccffff;"></span></p>
 <h1 style="color: #5e9ca0; text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use: #### as the OTP to reset your password</span> </span></h1>
-<p style="text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use #### as a&nbsp; OTP. It will be valid for next `+min+` mins. and try not to forget it next time ;)</span></span></p>
+<p style="text-align: center;"><span style="background-color: #ffffff;"><span style="color: #000000;">Please use #### as a&nbsp; OTP. It will be valid for next `+parseInt(min,10)+` mins. and try not to forget it next time ;)</span></span></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p></body></html>`;
 router.get("/", function(req, res) {
@@ -244,15 +244,7 @@ const forgotpassword = (state,callback) =>{
     var lastupdatetime=moment(val.updatedAt);
     var dif ="15151515"
     var duration = moment.duration(currentTime.diff(lastupdatetime));
-    // var dif = moment.duration(currentTime.diff(lastupdatetime));
-    callback({
-      "dif":dif,
-      "last":lastupdatetime,
-      "currentTime":currentTime,
-      "duration":duration,
-      "asmins":duration.asMinutes()
-    })
-    return
+    var dif = duration.asMinutes()
     if(dif>min)
     {
       models.User.update({token:null},{where:{id:id}})

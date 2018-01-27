@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const models = require('../models');
+const crypto = require("../utils/crypto");
 const helper = require("../utils/helper");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
@@ -50,6 +51,7 @@ router.patch("/:id", function(req, res) {
 })
 
 const addrecord = (state, callback) => {
+  state.note = crypto.encrypt(state.note,state.UserId)
   models.Diary.create(state).then((val) => {
     callback({
       "error": false,
@@ -87,14 +89,18 @@ const deleterecord = (state, callback) => {
         "message": "Data Not Found"
       })
   }).catch((err) => {
-    callback(err);
+    callback({
+      error: true,
+      "status": "FAILURE",
+      "message": "Something Went Wrong"
+    });
   })
 }
 
 const updaterecord = (value, callback) => {
   models.Diary.update({
     title: value.title,
-    note: value.note
+    note: crypto.encrypt(value.note,value.UserId)
   }, {
     where: {
       "id": value.id
@@ -114,7 +120,11 @@ const updaterecord = (value, callback) => {
         "message": "Data Not Found"
       })
   }).catch((err) => {
-    callback(err);
+   callback({
+      error: true,
+      "status": "FAILURE",
+      "message": "Something Went Wrong"
+    });
   })
 }
 
@@ -126,10 +136,8 @@ const getall = (state, callback) => {
   }).then((val) => {
     val = val.map(function(x) {
       x = x.dataValues;
-      delete x["createdAt"];
-      delete x["updatedAt"];
-      delete x["UserId"];
-      return x;
+      x.note = crypto.decrypt(x.note,x.userId);
+      x = helper.clean(x,["createdAt","updateAt","userId"])
     })
     callback({
       "error": false,
@@ -157,9 +165,8 @@ const getone = (state, callback) => {
         "data": val
       });
     val = val.dataValues;
-    delete val["createdAt"];
-    delete val["updatedAt"];
-    delete val["UserId"];
+    val.note = crypto.decrypt(val.note,val.userId);
+    val = helper.clean(val,["createdAt","updateAt","userId"])
     callback({
       "error": false,
       "data": val

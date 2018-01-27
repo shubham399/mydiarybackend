@@ -249,18 +249,16 @@ const forgotpassword = (state,callback) =>{
     const lastupdatetime=val.updatedAt;
     const lastupdatestring= {
       "date":(moment(lastupdatetime).format()).toString().split("T")[0],
-      "hour":(new Date(lastupdatetime)).toString().split("T")[1].split(":")[0],
-      "min":(new Date(lastupdatetime)).toString().split("T")[1].split(":")[1]
+      "hour":(moment(lastupdatetime)).toString().split("T")[1].split(":")[0],
+      "min":(moment(lastupdatetime)).toString().split("T")[1].split(":")[1]
     }
-      let diftime =(new Date(currentTime).getTime()) - (new Date(lastupdatetime).getTime())
-    let dif =(new Date(currentTime)) - (new Date(lastupdatetime))
+    let dif = currentTimestring.min - lastupdatestring.min;
     callback({
       "lastupdatetime":lastupdatetime,
       "lastupdatetimetime":(new Date(currentTime).getTime()),
       "currentTime":currentTime,
       "currentTimetime": (new Date(lastupdatetime).getTime()),
       "time":dif,
-      "timetime":diftime,
       "lastupdatestring":lastupdatestring,
       "currentTimeString":currentTimestring
       

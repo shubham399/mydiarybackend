@@ -138,6 +138,7 @@ const getall = (state, callback) => {
     x = x.dataValues;
     x.note = crypto.decrypt(x.note,x.UserId);
     x = helper.clean(x,["createdAt","updatedAt","UserId"])
+    return x;
     })
     callback({
       "error": false,

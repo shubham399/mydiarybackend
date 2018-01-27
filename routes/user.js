@@ -190,7 +190,6 @@ const forgotpasswordinit = (state,callback) =>{
       email: state.email,
     }
   }).then((val)=>{
-    console.log(val.dataValues.email)
     if(val.dataValues.email == state.email){
   const otp = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
   const forgotpasswordcontenttemp = forgotpasswordcontent.replace(/####/g,otp)
@@ -236,8 +235,9 @@ const forgotpasswordinit = (state,callback) =>{
 const forgotpassword = (state,callback) =>{
   models.User.findOne({where: {token:state.otp}}).then((val)=>{
     val=val.dataValues;
+       val=helper.clean(val,["createdAt","updatedAt","id","password","userkey","token"])
     callback({
-      data:val
+      data:"this is just a test"
     })
 }).catch((err)=>{
      callback({

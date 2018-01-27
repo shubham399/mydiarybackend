@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const models = require('../models');
 const helper = require("../utils/helper");
+const crypto = require("../utils/crypto");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 const mailer = require("../utils/mailer");

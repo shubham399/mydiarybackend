@@ -249,8 +249,8 @@ const forgotpassword = (state,callback) =>{
       "dif":dif,
       "last":lastupdatetime,
       "currentTime":currentTime,
-      "duration":duration
-      // "asmins":dif.asMinutes()
+      "duration":duration,
+      "asmins":duration.asMinutes()
     })
     return
     if(dif>min)

@@ -61,7 +61,7 @@ const login = (state, callback) => {
     callback({
       "error": false,
       "status": "SUCCESS",
-      "message": "Login Successful."
+      "message": "Login Successful.",
       "SESSION_KEY": val.dataValues.userkey
     })
   }).catch((err) => {

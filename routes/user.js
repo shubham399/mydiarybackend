@@ -12,7 +12,7 @@ router.post("/register", function(req, res) {
   });
   req.checkBody("username", "Enter a valid Username").isLength({
     min: 3
-  }).matches(/^[a-z]+$/i);
+  }).matches(/^[a-z][a-z0-9]+$/i);
   var errors = req.validationErrors();
   if (errors) {
     res.send(errors);

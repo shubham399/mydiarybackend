@@ -43,14 +43,15 @@ const register = (state, callback) => {
     callback({
       "error": false,
       "status": "SUCCESS",
-      "desc": "User Register Successfully",
+      "message": "User Register Successfully",
       "SESSION_KEY": val.dataValues.userkey
     })
   }).catch((err) => {
     callback({
       error: true,
       "status": "FAILURE",
-      "message": "Something Went Wrong"
+      "message": "Something Went Wrong",
+      "error":err
     });
   })
 }

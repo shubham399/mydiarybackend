@@ -37,14 +37,14 @@ const register = (state, callback) => {
     callback({
       "error": false,
       "status": "SUCCESS",
-      "desc": "User Register Successfully",
+      "message": "User Register Successfully",
       "SESSION_KEY": val.dataValues.userkey
     })
   }).catch((err) => {
     callback({
       error: true,
       "status": "FAILURE",
-      "message": "Something Went Wrong"
+      "message": "UserName or Email already Exist/ Something went wrong"
     });
   })
 }
@@ -141,6 +141,7 @@ const forgotpasswordinit = (state, callback) => {
     })
   })
 }
+
 
 const forgotpassword = (state, callback) => {
   var now = moment();

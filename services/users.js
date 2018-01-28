@@ -44,8 +44,7 @@ const register = (state, callback) => {
     callback({
       error: true,
       "status": "FAILURE",
-      "message": "Something Went Wrong",
-      "error":err
+      "message": "UserName or Email already Exist/ Something went wrong"
     });
   })
 }

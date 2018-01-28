@@ -31,8 +31,14 @@ const senduserdetails = (req, callback) => {
 }
 
 const register = (state, callback) => {
+  console.log("In Register....");
+  console.log(state);
   state["userkey"] = helper.getuuid();
+  console.log("After userkey....");
+  console.log(state);
   state.password = crypto.gethash(state.password);
+  console.log("After Passowrd....");
+  console.log(state);
   models.User.create(state).then((val) => {
     callback({
       "error": false,
@@ -161,7 +167,7 @@ const forgotpassword = (state,callback) =>{
       "error": true,
       "status": "FAILURE",
       "message": "OTP Expired Please Regenrate an OTP"
-      })   
+      })
     }
     else
     {
@@ -175,8 +181,8 @@ const forgotpassword = (state,callback) =>{
       "error": true,
       "status": "FAILURE",
       "message": "Something went wrong"
-    })   
-      })  
+    })
+      })
       })
     }
 }).catch((err)=>{

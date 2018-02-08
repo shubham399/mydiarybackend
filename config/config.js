@@ -7,7 +7,8 @@ module.exports = {
     mailer_port: "587",
     mailer_username: "apikey",
     mailer_password: process.env.MAILER_PASSWORD,
-    forgotexpiry: 30.00 //mins
+    forgotexpiry: 30.00, //mins
+    resetdb:true
   },
   test: {
     host: "http://uat.mydiaries.cf",
@@ -17,7 +18,8 @@ module.exports = {
     mailer_port: "587",
     mailer_username: "apikey",
     mailer_password: process.env.MAILER_PASSWORD,
-    forgotexpiry: 30.00 //mins
+    forgotexpiry: 30.00,//mins
+    resetdb:false
   },
   production: {
     host: "http://api.mydiaries.cf",
@@ -27,6 +29,7 @@ module.exports = {
     mailer_port: "587",
     mailer_username: "apikey",
     mailer_password: process.env.MAILER_PASSWORD,
-    forgotexpiry: 30.00 //mins
+    forgotexpiry: 30.00, //mins
+    resetdb:false
   }
 };

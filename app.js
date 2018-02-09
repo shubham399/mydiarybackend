@@ -8,6 +8,8 @@ const models = require('./models');
 const validator = require('express-validator');
 const apiauthMiddleware = require("./middlewares/apiauth")
 const sessionauth = require("./middlewares/sessionauth")
+var env = process.env.NODE_ENV || 'development';
+var config = require('./config/config.js')[env];
 const initmiddleware = () => {
   app.use(helmet());
   app.use(bodyParser.urlencoded({
@@ -28,10 +30,10 @@ const initroutes = () => {
 }
 
 const startserver = () => {
-  app.listen(process.env.PORT, () => console.log('Example app listening on port ' + process.env.PORT))
+  app.listen(process.env.PORT,() => console.log('Server Started at ' + process.env.PORT))
 }
 
-models.sequelize.sync();
+models.sequelize.sync({force:config.resetdb});
 initmiddleware();
 initroutes();
 startserver();

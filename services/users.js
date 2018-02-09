@@ -37,14 +37,14 @@ const register = (state, callback) => {
     callback({
       "error": false,
       "status": "SUCCESS",
-      "desc": "User Register Successfully",
+      "message": "User Register Successfully",
       "SESSION_KEY": val.dataValues.userkey
     })
   }).catch((err) => {
     callback({
       error: true,
       "status": "FAILURE",
-      "message": "Something Went Wrong"
+      "message": "UserName or Email already Exist/ Something went wrong"
     });
   })
 }
@@ -61,6 +61,7 @@ const login = (state, callback) => {
     callback({
       "error": false,
       "status": "SUCCESS",
+      "message": "Login Successful.",
       "SESSION_KEY": val.dataValues.userkey
     })
   }).catch((err) => {
@@ -74,7 +75,8 @@ const login = (state, callback) => {
 
 const logout = (sessionkey, callback) => {
   models.User.update({
-    "userkey": helper.getuuid()
+    "userkey": helper.getuuid(),
+    "token":null
   }, {
     where: {
       "userkey": sessionkey
@@ -141,6 +143,7 @@ const forgotpasswordinit = (state, callback) => {
     })
   })
 }
+
 
 const forgotpassword = (state, callback) => {
   var now = moment();

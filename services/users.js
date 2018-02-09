@@ -75,7 +75,8 @@ const login = (state, callback) => {
 
 const logout = (sessionkey, callback) => {
   models.User.update({
-    "userkey": helper.getuuid()
+    "userkey": helper.getuuid(),
+    "token":null
   }, {
     where: {
       "userkey": sessionkey

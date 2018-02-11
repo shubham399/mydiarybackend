@@ -6,8 +6,8 @@ const redis = require("../services/redis");
 module.exports = function(req, res, next) {
   const session = req.get('X-SESSION-KEY');
   redis.get(session,(err,reply)=>{
-    console.log("Session:")
-    console.log(reply)
+    console.log("Session:",reply)
+    // console.log(reply)
   });
   models.User.findOne({
     where: {

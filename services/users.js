@@ -7,6 +7,7 @@ const mailer = require("../utils/mailer");
 var moment = require('moment');
 const min = config.forgotexpiry
 const forgotpasswordcontent = require("../utils/constants").forgotpasswordcontent
+const response = require("../utils/constants").responses
 const senduserdetails = (req, callback) => {
   const session = req.get('X-SESSION-KEY');
   models.User.findOne({
@@ -34,18 +35,16 @@ const register = (state, callback) => {
   state["userkey"] = helper.getuuid();
   state.password = crypto.gethash(state.password);
   models.User.create(state).then((val) => {
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "User Register Successfully",
-      "SESSION_KEY": val.dataValues.userkey
-    })
+    var res = response["REGISTERED"];
+    res.SESSION_KEY =val.dataValues.userkey
+    callback(res)
   }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "UserName or Email already Exist/ Something went wrong"
-    });
+    if(err.errors[0].path == "username")
+    callback(response["E03"]);
+    else if(err.errors[0].path == "email")
+    callback(response["E04"]);
+    else
+    callback(response.E05)
   })
 }
 
@@ -57,14 +56,11 @@ const login = (state, callback) => {
       password: state.password
     }
   }).then((val) => {
-
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "Login Successful.",
-      "SESSION_KEY": val.dataValues.userkey
-    })
+    var res = response["LOGIN"];
+    res.SESSION_KEY = val.dataValues.userkey
+    callback(res)
   }).catch((err) => {
+    console.log(err);
     callback({
       "error": true,
       "status": "FAILURE",
@@ -83,11 +79,7 @@ const logout = (sessionkey, callback) => {
     }
   }).then((val) => {
 
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "LoggedOut Successful"
-    })
+    callback(response["LOGOUT"]);
   }).catch((err) => {
     callback({
       "error": true,
@@ -167,11 +159,7 @@ const forgotpassword = (state, callback) => {
             id: id
           }
         })
-        callback({
-          "error": true,
-          "status": "FAILURE",
-          "message": "OTP Expired Please Regenrate an OTP"
-        })
+        callback(response["E10"]);
       } else {
         models.User.update({
           password: crypto.gethash(state.password),
@@ -181,11 +169,7 @@ const forgotpassword = (state, callback) => {
             id: id
           }
         }).then((val) => {
-          callback({
-            "error": false,
-            "status": "SUCCESS",
-            "message": "password updated"
-          }).catch((err) => {
+          callback(response["CHANGE_SUCCESS"]).catch((err) => {
             callback({
               "error": true,
               "status": "FAILURE",
@@ -195,18 +179,10 @@ const forgotpassword = (state, callback) => {
         })
       }
     }).catch((err) => {
-      callback({
-        "error": true,
-        "status": "FAILURE",
-        "message": "Invalid OTP"
-      })
+      callback(response["E08"]);
     });
   } else {
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Password Doesnot match"
-    })
+    callback(response["E09"]);
   }
 }
 exports.senduserdetails = senduserdetails;

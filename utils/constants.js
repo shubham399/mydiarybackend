@@ -48,7 +48,21 @@ const responses = {
 "status":"SUCCESS",
 "message":"ALREADY LOGGEDOUT"
 },
-
+"E08":{
+        "error": true,
+        "status": "FAILURE",
+        "message": "Invalid OTP"
+      },
+"E09":{
+      "error": true,
+      "status": "FAILURE",
+      "message": "Password Doesnot match"
+    },
+"E10":{
+          "error": true,
+          "status": "FAILURE",
+          "message": "OTP Expired Please Regenrate an OTP"
+},
 "REGISTERED":{
     "error":false,
     "status":"SUCCESS",
@@ -71,7 +85,12 @@ const responses = {
     "status":"SUCCESS",
     "message":"USERDATA",
     "data":"{data}"
-}
+},
+"CHANGE_SUCCESS":{
+            "error": false,
+            "status": "SUCCESS",
+            "message": "PASSWORD UPDATED"
+          }
 }
 
 

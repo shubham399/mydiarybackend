@@ -2,6 +2,7 @@ const router = require("express").Router();
 const user = require("../services/users");
 const validate = require("../utils/helper.js").validate;
 const resp = require("../utils/constants").responses;
+
 var err = resp.EC;
 router.get("/", function(req, res) {
   user.senduserdetails(req, (val) => {

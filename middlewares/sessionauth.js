@@ -2,8 +2,13 @@ const models = require('../models');
 const helper = require("../utils/helper");
 const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
+const redis = require("../services/redis");
 module.exports = function(req, res, next) {
   const session = req.get('X-SESSION-KEY');
+  redis.get(session,(err,reply)=>{
+    console.log("Session:")
+    console.log(reply)
+  });
   models.User.findOne({
     where: {
       userkey: session

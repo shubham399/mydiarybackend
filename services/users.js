@@ -5,6 +5,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 const mailer = require("../utils/mailer");
 var moment = require('moment');
+const redis = require("../services/redis")
 const min = config.forgotexpiry
 const forgotpasswordcontent = require("../utils/constants").forgotpasswordcontent
 const response = require("../utils/constants").responses
@@ -30,6 +31,7 @@ const register = (state, callback) => {
   state.password = crypto.gethash(state.password);
   models.User.create(state).then((val) => {
     var res = response["REGISTERED"];
+    redis.set(val.dataValues.userkey,JSON.stringify(val.dataValues));
     res.SESSION_KEY =val.dataValues.userkey
     callback(res)
   }).catch((err) => {
@@ -52,6 +54,7 @@ const login = (state, callback) => {
   }).then((val) => {
     var res = response["LOGIN"];
     res.SESSION_KEY = val.dataValues.userkey
+    redis.set(val.dataValues.userkey,JSON.stringify(val.dataValues));
     callback(res)
   }).catch((err) => {
     console.log(err);
@@ -60,6 +63,7 @@ const login = (state, callback) => {
 }
 
 const logout = (sessionkey, callback) => {
+  redis.set(sessionkey,null);
   models.User.update({
     "userkey": helper.getuuid(),
     "token":null
@@ -71,6 +75,7 @@ const logout = (sessionkey, callback) => {
 
     callback(response["LOGOUT"]);
   }).catch((err) => {
+    console.error(err);
     callback(response.E05);
   })
 }
@@ -96,12 +101,14 @@ const forgotpasswordinit = (state, callback) => {
       }).then((val) => {
         callback(response.INITIED)
       }).catch((err) => {
+        console.error(err);
         callback(response.E05)
       })
     } else {
       callback(response.E02)
     }
   }).catch((err) => {
+    console.error(err);
     callback(response.E02)
   })
 }
@@ -140,11 +147,13 @@ const forgotpassword = (state, callback) => {
           }
         }).then((val) => {
           callback(response["CHANGE_SUCCESS"]).catch((err) => {
+            console.error(err);
             callback(response.E05)
           })
         })
       }
     }).catch((err) => {
+      console.error(err);
       callback(response["E08"]);
     });
   } else {

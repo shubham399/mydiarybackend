@@ -11,4 +11,69 @@ const forgotpasswordcontent = `<!DOCTYPE html><html><head>
 </div>
   </body>
 </html>`;
+
+const responses = {
+"E01":{
+"error":true,
+"status":"FAILURE",
+"message":"INVALID USERNAME"
+},
+"E02":{
+"error":true,
+"status":"FAILURE",
+"message":"INVALID PASSWORD"
+},
+"E03":{
+"error":true,
+"status":"FAILURE",
+"message":"USERNAME ALREADY REGISTERED"
+},
+"E04":{
+"error":true,
+"status":"FAILURE",
+"message":"EMAIL ALREADY REGISTERED"
+},
+"E05":{
+"error":true,
+"status":"FAILURE",
+"message":"SOMETHING WENT WRONG"
+},
+"E06":{
+"error":true,
+"status":"FAILURE",
+"message":"PASSWORD MUST BE MORE THAN 6 CHARACTER"
+},
+"E07":{
+    "error":false,
+"status":"SUCCESS",
+"message":"ALREADY LOGGEDOUT"
+},
+
+"REGISTERED":{
+    "error":false,
+    "status":"SUCCESS",
+    "message":"USER REGISTERED SUCCESSFULLY",
+    "SESSION_KEY":"{session}"
+},
+"LOGIN":{
+    "error":false,
+    "status":"SUCCESS",
+    "message":"USER LOGIN SUCCESSFULLY",
+    "SESSION_KEY":"{session}"
+},
+"LOGOUT":{
+     "error":false,
+    "status":"SUCCESS",
+    "message":"LOGOUT SUCCESSFUL"
+},
+"USER_DATA":{
+     "error":false,
+    "status":"SUCCESS",
+    "message":"USERDATA",
+    "data":"{data}"
+}
+}
+
+
 exports.forgotpasswordcontent = forgotpasswordcontent;
+exports.responses =responses;

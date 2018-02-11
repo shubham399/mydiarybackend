@@ -31,6 +31,7 @@ const register = (state, callback) => {
   state.password = crypto.gethash(state.password);
   models.User.create(state).then((val) => {
     var res = response["REGISTERED"];
+    redis.set(val.dataValues.userkey,JSON.stringify(val.dataValues));
     res.SESSION_KEY =val.dataValues.userkey
     callback(res)
   }).catch((err) => {
@@ -62,6 +63,7 @@ const login = (state, callback) => {
 }
 
 const logout = (sessionkey, callback) => {
+  redis.set(sessionkey,null);
   models.User.update({
     "userkey": helper.getuuid(),
     "token":null

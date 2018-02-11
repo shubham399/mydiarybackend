@@ -63,6 +63,11 @@ const responses = {
           "status": "FAILURE",
           "message": "OTP Expired Please Regenrate an OTP"
 },
+"E11":{
+      error: true,
+      "status": "FAILURE",
+      "message": "LOGIN TO PERFORM THIS ACTION"
+    },
 "REGISTERED":{
     "error":false,
     "status":"SUCCESS",

@@ -17,17 +17,11 @@ const senduserdetails = (req, callback) => {
   }).then((val) => {
     val = val.dataValues;
     val = helper.clean(val, ["createdAt", "updatedAt", "id", "password", "userkey", "token"])
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "data": val
-    });
+    var res = response.USER_DATA;
+    res.data = val;
+    callback(res);
   }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "Login to View User Details"
-    });
+    callback(response.E11);
   })
 }
 

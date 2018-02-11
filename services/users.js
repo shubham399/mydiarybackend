@@ -31,16 +31,16 @@ const register = (state, callback) => {
   state.password = crypto.gethash(state.password);
   models.User.create(state).then((val) => {
     var res = response["REGISTERED"];
-    redis.set(val.dataValues.userkey,JSON.stringify(val.dataValues));
-    res.SESSION_KEY =val.dataValues.userkey
+    redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues));
+    res.SESSION_KEY = val.dataValues.userkey
     callback(res)
   }).catch((err) => {
-    if(err.errors[0].path == "username")
-    callback(response["E03"]);
-    else if(err.errors[0].path == "email")
-    callback(response["E04"]);
+    if (err.errors[0].path == "username")
+      callback(response["E03"]);
+    else if (err.errors[0].path == "email")
+      callback(response["E04"]);
     else
-    callback(response.E05)
+      callback(response.E05)
   })
 }
 
@@ -54,7 +54,7 @@ const login = (state, callback) => {
   }).then((val) => {
     var res = response["LOGIN"];
     res.SESSION_KEY = val.dataValues.userkey
-    redis.set(val.dataValues.userkey,JSON.stringify(val.dataValues));
+    redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues));
     callback(res)
   }).catch((err) => {
     console.log(err);
@@ -63,10 +63,10 @@ const login = (state, callback) => {
 }
 
 const logout = (sessionkey, callback) => {
-  redis.set(sessionkey,null);
+  redis.set(sessionkey, null);
   models.User.update({
     "userkey": helper.getuuid(),
-    "token":null
+    "token": null
   }, {
     where: {
       "userkey": sessionkey

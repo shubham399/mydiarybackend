@@ -1,6 +1,6 @@
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 let transporter = nodemailer.createTransport({
   host: config.mailer_host,
@@ -14,7 +14,7 @@ let transporter = nodemailer.createTransport({
 
 const sendmail = (to, subject, message) => {
   let mailOptions = {
-    from: 'noreply@mydiaries.cf', // sender address
+    from: "noreply@mydiaries.cf", // sender address
     to: to, // list of receivers
     subject: subject, // Subject line
     html: message // html body
@@ -24,7 +24,7 @@ const sendmail = (to, subject, message) => {
       console.log("Erorr:")
       return console.log(error);
     }
-    console.log('Message sent: %s', info.messageId);
+    console.log("Message sent: %s", info.messageId);
   });
 }
 exports.sendmail = sendmail;

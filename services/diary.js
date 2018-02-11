@@ -1,7 +1,7 @@
-const models = require('../models');
+const models = require("../models");
 const crypto = require("../utils/crypto");
 const helper = require("../utils/helper");
-
+const response = require("../utils/constants").responses
 const addrecord = (state, callback) => {
   state.note = crypto.encrypt(state.note, state.UserId)
   models.Diary.create(state).then((val) => {
@@ -14,11 +14,7 @@ const addrecord = (state, callback) => {
       }
     })
   }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "Something Went Wrong"
-    });
+    callback(response.E05);
   })
 }
 
@@ -41,11 +37,7 @@ const deleterecord = (state, callback) => {
         "message": "Data Not Found"
       })
   }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "Something Went Wrong"
-    });
+    callback(response.E05);
   })
 }
 
@@ -72,11 +64,7 @@ const updaterecord = (value, callback) => {
         "message": "Data Not Found"
       })
   }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "Something Went Wrong"
-    });
+    callback(response.E05);
   })
 }
 
@@ -97,11 +85,7 @@ const getall = (state, callback) => {
       "data": val
     });
   }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "Something Went Wrong"
-    });
+    callback(response.E05);
   })
 }
 
@@ -125,11 +109,7 @@ const getone = (state, callback) => {
       "data": val
     });
   }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "Something Went Wrong"
-    });
+    callback(response.E05);
   })
 }
 

@@ -16,12 +16,12 @@ const responses = {
 "E01":{
 "error":true,
 "status":"FAILURE",
-"message":"INVALID USERNAME"
+"message":"INVALID USERNAME OR PASSWORD"
 },
 "E02":{
 "error":true,
 "status":"FAILURE",
-"message":"INVALID PASSWORD"
+"message":"INVALID EMAIL"
 },
 "E03":{
 "error":true,
@@ -68,6 +68,11 @@ const responses = {
       "status": "FAILURE",
       "message": "LOGIN TO PERFORM THIS ACTION"
     },
+"EC":{
+     error: true,
+      "status": "FAILURE",
+      "message": "{ERROR}"
+},
 "REGISTERED":{
     "error":false,
     "status":"SUCCESS",
@@ -95,7 +100,12 @@ const responses = {
             "error": false,
             "status": "SUCCESS",
             "message": "PASSWORD UPDATED"
-          }
+          },
+"INITIED":{
+          "error": false,
+          "status": "SUCCESS",
+          "message": "ForgotPassword Initiated"
+        }
 }
 
 

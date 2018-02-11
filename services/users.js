@@ -55,11 +55,7 @@ const login = (state, callback) => {
     callback(res)
   }).catch((err) => {
     console.log(err);
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Invalid Username or Password"
-    });
+    callback(response.E01);
   })
 }
 
@@ -75,11 +71,7 @@ const logout = (sessionkey, callback) => {
 
     callback(response["LOGOUT"]);
   }).catch((err) => {
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Something Went Wrong"
-    });
+    callback(response.E05);
   })
 }
 const forgotpasswordinit = (state, callback) => {
@@ -102,31 +94,15 @@ const forgotpasswordinit = (state, callback) => {
           "email": state.email
         }
       }).then((val) => {
-        callback({
-          "error": false,
-          "status": "SUCCESS",
-          "message": "ForgotPassword Initiated"
-        })
+        callback(response.INITIED)
       }).catch((err) => {
-        callback({
-          "error": true,
-          "status": "FAILURE",
-          "message": "ForgotPassword Initiatation failed"
-        })
+        callback(response.E05)
       })
     } else {
-      callback({
-        "error": true,
-        "status": "FAILURE",
-        "message": "Email Doesnot exisit"
-      })
+      callback(response.E02)
     }
   }).catch((err) => {
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Email Doesnot exisit"
-    })
+    callback(response.E02)
   })
 }
 
@@ -164,11 +140,7 @@ const forgotpassword = (state, callback) => {
           }
         }).then((val) => {
           callback(response["CHANGE_SUCCESS"]).catch((err) => {
-            callback({
-              "error": true,
-              "status": "FAILURE",
-              "message": "Something went wrong"
-            })
+            callback(response.E05)
           })
         })
       }

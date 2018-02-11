@@ -11,4 +11,103 @@ const forgotpasswordcontent = `<!DOCTYPE html><html><head>
 </div>
   </body>
 </html>`;
+
+const responses = {
+  "E01": {
+    "error": true,
+    "status": "FAILURE",
+    "message": "INVALID USERNAME OR PASSWORD"
+  },
+  "E02": {
+    "error": true,
+    "status": "FAILURE",
+    "message": "INVALID EMAIL"
+  },
+  "E03": {
+    "error": true,
+    "status": "FAILURE",
+    "message": "USERNAME ALREADY REGISTERED"
+  },
+  "E04": {
+    "error": true,
+    "status": "FAILURE",
+    "message": "EMAIL ALREADY REGISTERED"
+  },
+  "E05": {
+    "error": true,
+    "status": "FAILURE",
+    "message": "SOMETHING WENT WRONG"
+  },
+  "E06": {
+    "error": true,
+    "status": "FAILURE",
+    "message": "PASSWORD MUST BE MORE THAN 6 CHARACTER"
+  },
+  "E07": {
+    "error": false,
+    "status": "SUCCESS",
+    "message": "ALREADY LOGGEDOUT"
+  },
+  "E08": {
+    "error": true,
+    "status": "FAILURE",
+    "message": "Invalid OTP"
+  },
+  "E09": {
+    "error": true,
+    "status": "FAILURE",
+    "message": "Password Doesnot match"
+  },
+  "E10": {
+    "error": true,
+    "status": "FAILURE",
+    "message": "OTP Expired Please Regenrate an OTP"
+  },
+  "E11": {
+    error: true,
+    "status": "FAILURE",
+    "message": "LOGIN TO PERFORM THIS ACTION"
+  },
+  "EC": {
+    error: true,
+    "status": "FAILURE",
+    "message": "{ERROR}"
+  },
+  "REGISTERED": {
+    "error": false,
+    "status": "SUCCESS",
+    "message": "USER REGISTERED SUCCESSFULLY",
+    "SESSION_KEY": "{session}"
+  },
+  "LOGIN": {
+    "error": false,
+    "status": "SUCCESS",
+    "message": "USER LOGIN SUCCESSFULLY",
+    "SESSION_KEY": "{session}"
+  },
+  "LOGOUT": {
+    "error": false,
+    "status": "SUCCESS",
+    "message": "LOGOUT SUCCESSFUL"
+  },
+  "USER_DATA": {
+    "error": false,
+    "status": "SUCCESS",
+    "message": "USERDATA",
+    "data": "{data}"
+  },
+  "CHANGE_SUCCESS": {
+    "error": false,
+    "status": "SUCCESS",
+    "message": "PASSWORD UPDATED"
+  },
+  "INITIED": {
+    "error": false,
+    "status": "SUCCESS",
+    "message": "ForgotPassword Initiated"
+  }
+}
+
+
 exports.forgotpasswordcontent = forgotpasswordcontent;
+exports.responses = responses;

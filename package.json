@@ -18,7 +18,7 @@
     "RESTFUL"
   ],
   "author": "shubham kumar",
-  "license": "ISC",
+  "license": "GNU",
   "bugs": {
     "url": "https://github.com/shubham399/mydiarybackend/issues"
   },
@@ -26,12 +26,12 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
-    "crypto": "^1.0.1",
     "express": "^4.16.2",
     "express-validator": "^4.3.0",
     "fs": "0.0.1-security",
     "helmet": "^3.9.0",
     "moment": "^2.20.1",
+    "morgan": "^1.9.0",
     "mysql2": "^1.5.2",
     "nodemailer": "^4.4.2",
     "path": "^0.12.7",

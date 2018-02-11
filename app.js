@@ -9,6 +9,7 @@ const validator = require('express-validator');
 const apiauthMiddleware = require("./middlewares/apiauth")
 const sessionauth = require("./middlewares/sessionauth")
 var env = process.env.NODE_ENV || 'development';
+var morgan = require("morgan");
 var config = require('./config/config.js')[env];
 const initmiddleware = () => {
   app.use(helmet());
@@ -19,6 +20,7 @@ const initmiddleware = () => {
   app.use(validator());
   app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
+  app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]'))
 }
 
 const initroutes = () => {

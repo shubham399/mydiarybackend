@@ -5,8 +5,10 @@ const env = process.env.NODE_ENV || 'development';
 const config = require("../config/config")[env];
 const mailer = require("../utils/mailer");
 var moment = require('moment');
+const redis = require("../services/redis")
 const min = config.forgotexpiry
 const forgotpasswordcontent = require("../utils/constants").forgotpasswordcontent
+const response = require("../utils/constants").responses
 const senduserdetails = (req, callback) => {
   const session = req.get('X-SESSION-KEY');
   models.User.findOne({
@@ -16,17 +18,11 @@ const senduserdetails = (req, callback) => {
   }).then((val) => {
     val = val.dataValues;
     val = helper.clean(val, ["createdAt", "updatedAt", "id", "password", "userkey", "token"])
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "data": val
-    });
+    var res = response.USER_DATA;
+    res.data = val;
+    callback(res);
   }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "Login to View User Details"
-    });
+    callback(response.E11);
   })
 }
 
@@ -34,18 +30,17 @@ const register = (state, callback) => {
   state["userkey"] = helper.getuuid();
   state.password = crypto.gethash(state.password);
   models.User.create(state).then((val) => {
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "User Register Successfully",
-      "SESSION_KEY": val.dataValues.userkey
-    })
+    var res = response["REGISTERED"];
+    redis.set(val.dataValues.userkey,JSON.stringify(val.dataValues));
+    res.SESSION_KEY =val.dataValues.userkey
+    callback(res)
   }).catch((err) => {
-    callback({
-      error: true,
-      "status": "FAILURE",
-      "message": "UserName or Email already Exist/ Something went wrong"
-    });
+    if(err.errors[0].path == "username")
+    callback(response["E03"]);
+    else if(err.errors[0].path == "email")
+    callback(response["E04"]);
+    else
+    callback(response.E05)
   })
 }
 
@@ -57,23 +52,18 @@ const login = (state, callback) => {
       password: state.password
     }
   }).then((val) => {
-
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "Login Successful.",
-      "SESSION_KEY": val.dataValues.userkey
-    })
+    var res = response["LOGIN"];
+    res.SESSION_KEY = val.dataValues.userkey
+    redis.set(val.dataValues.userkey,JSON.stringify(val.dataValues));
+    callback(res)
   }).catch((err) => {
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Invalid Username or Password"
-    });
+    console.log(err);
+    callback(response.E01);
   })
 }
 
 const logout = (sessionkey, callback) => {
+  redis.set(sessionkey,null);
   models.User.update({
     "userkey": helper.getuuid(),
     "token":null
@@ -83,17 +73,10 @@ const logout = (sessionkey, callback) => {
     }
   }).then((val) => {
 
-    callback({
-      "error": false,
-      "status": "SUCCESS",
-      "message": "LoggedOut Successful"
-    })
+    callback(response["LOGOUT"]);
   }).catch((err) => {
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Something Went Wrong"
-    });
+    console.error(err);
+    callback(response.E05);
   })
 }
 const forgotpasswordinit = (state, callback) => {
@@ -116,31 +99,17 @@ const forgotpasswordinit = (state, callback) => {
           "email": state.email
         }
       }).then((val) => {
-        callback({
-          "error": false,
-          "status": "SUCCESS",
-          "message": "ForgotPassword Initiated"
-        })
+        callback(response.INITIED)
       }).catch((err) => {
-        callback({
-          "error": true,
-          "status": "FAILURE",
-          "message": "ForgotPassword Initiatation failed"
-        })
+        console.error(err);
+        callback(response.E05)
       })
     } else {
-      callback({
-        "error": true,
-        "status": "FAILURE",
-        "message": "Email Doesnot exisit"
-      })
+      callback(response.E02)
     }
   }).catch((err) => {
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Email Doesnot exisit"
-    })
+    console.error(err);
+    callback(response.E02)
   })
 }
 
@@ -167,11 +136,7 @@ const forgotpassword = (state, callback) => {
             id: id
           }
         })
-        callback({
-          "error": true,
-          "status": "FAILURE",
-          "message": "OTP Expired Please Regenrate an OTP"
-        })
+        callback(response["E10"]);
       } else {
         models.User.update({
           password: crypto.gethash(state.password),
@@ -181,32 +146,18 @@ const forgotpassword = (state, callback) => {
             id: id
           }
         }).then((val) => {
-          callback({
-            "error": false,
-            "status": "SUCCESS",
-            "message": "password updated"
-          }).catch((err) => {
-            callback({
-              "error": true,
-              "status": "FAILURE",
-              "message": "Something went wrong"
-            })
+          callback(response["CHANGE_SUCCESS"]).catch((err) => {
+            console.error(err);
+            callback(response.E05)
           })
         })
       }
     }).catch((err) => {
-      callback({
-        "error": true,
-        "status": "FAILURE",
-        "message": "Invalid OTP"
-      })
+      console.error(err);
+      callback(response["E08"]);
     });
   } else {
-    callback({
-      "error": true,
-      "status": "FAILURE",
-      "message": "Password Doesnot match"
-    })
+    callback(response["E09"]);
   }
 }
 exports.senduserdetails = senduserdetails;

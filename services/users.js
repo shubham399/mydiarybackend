@@ -31,7 +31,10 @@ const register = (state, callback) => {
   state.password = crypto.gethash(state.password);
   models.User.create(state).then((val) => {
     var res = response["REGISTERED"];
-    redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues));
+    if(state.remeberme !=undefined && state.remeberme == true)
+      redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues));
+    else
+      redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues), 'EX', config.loginTtl);
     res.SESSION_KEY = val.dataValues.userkey
     callback(res)
   }).catch((err) => {
@@ -54,7 +57,10 @@ const login = (state, callback) => {
   }).then((val) => {
     var res = response["LOGIN"];
     res.SESSION_KEY = val.dataValues.userkey
-    redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues));
+        if(state.remeberme !=undefined && state.remeberme == true)
+      redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues));
+    else
+      redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues), 'EX', config.loginTtl);
     callback(res)
   }).catch((err) => {
     console.log(err);
@@ -63,7 +69,7 @@ const login = (state, callback) => {
 }
 
 const logout = (sessionkey, callback) => {
-  redis.set(sessionkey, null);
+  redis.set(sessionkey, null,'EX',1);
   models.User.update({
     "userkey": helper.getuuid(),
     "token": null

@@ -21,7 +21,7 @@ module.exports = {
     forgotexpiry: 30.00, //mins
     resetdb: false,
     redisURL: process.env.REDIS_URL,
-    loginTtl:10*60 //mins
+    loginTtl:1*60 //mins
   },
   production: {
     connection_url: process.env.DATABASE_URL,

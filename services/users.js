@@ -9,21 +9,29 @@ const redis = require("../services/redis")
 const min = config.forgotexpiry
 const forgotpasswordcontent = require("../utils/constants").forgotpasswordcontent
 const response = require("../utils/constants").responses
+var jwt = require('jsonwebtoken');
+
 const senduserdetails = (req, callback) => {
   const session = req.get('X-SESSION-KEY');
-  models.User.findOne({
-    where: {
-      userkey: session
-    }
-  }).then((val) => {
-    val = val.dataValues;
-    val = helper.clean(val, ["createdAt", "updatedAt", "id", "password", "userkey", "token"])
-    var res = response.USER_DATA;
+  try{
+    var val = jwt.verify(session,config.jwtKey);
+    redis.get(val.session,(err, reply) => {
+    if(reply == "true"){
+    val = helper.clean(val, ["id","session", "iat","exp", "rememberme"])
+     var res = response.USER_DATA;
     res.data = val;
     callback(res);
-  }).catch((err) => {
+      }
+      else
+      {
+        callback(response.E11);
+      }
+  });
+    }
+ catch(err){
+   console.log(err);
     callback(response.E11);
-  })
+  }
 }
 
 const register = (state, callback) => {
@@ -31,8 +39,11 @@ const register = (state, callback) => {
   state.password = crypto.gethash(state.password);
   models.User.create(state).then((val) => {
     var res = response["REGISTERED"];
-    redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues));
-    res.SESSION_KEY = val.dataValues.userkey
+    val.dataValues["rememberme"] = false;
+    val.dataValues["session"]=val.dataValues.userkey;
+    val.dataValues = helper.clean(val.dataValues, ["createdAt", "updatedAt", "password", "userkey", "token"])
+    redis.set(val.dataValues.session,true);
+    res.SESSION_KEY = jwt.sign(val.dataValues,config.jwtKey,{ expiresIn: config.loginTtl})
     callback(res)
   }).catch((err) => {
     if (err.errors[0].path == "username")
@@ -53,8 +64,14 @@ const login = (state, callback) => {
     }
   }).then((val) => {
     var res = response["LOGIN"];
-    res.SESSION_KEY = val.dataValues.userkey
-    redis.set(val.dataValues.userkey, JSON.stringify(val.dataValues));
+    val.dataValues["rememberme"]= state.rememberme;
+    val.dataValues["session"]=val.dataValues.userkey;
+    val.dataValues = helper.clean(val.dataValues, ["createdAt", "updatedAt", "password", "userkey", "token"]);
+    redis.set(val.dataValues.session,true);
+    if(state.rememberme)
+    res.SESSION_KEY = jwt.sign(val.dataValues,config.jwtKey);
+    else
+    res.SESSION_KEY = jwt.sign(val.dataValues,config.jwtKey,{ expiresIn: config.loginTtl})
     callback(res)
   }).catch((err) => {
     console.log(err);
@@ -63,13 +80,15 @@ const login = (state, callback) => {
 }
 
 const logout = (sessionkey, callback) => {
-  redis.set(sessionkey, null);
+  try{
+  var val = jwt.verify(sessionkey,config.jwtKey);
+  redis.set(val.session,false);
   models.User.update({
     "userkey": helper.getuuid(),
     "token": null
   }, {
     where: {
-      "userkey": sessionkey
+      "userkey": val.session
     }
   }).then((val) => {
 
@@ -78,6 +97,11 @@ const logout = (sessionkey, callback) => {
     console.error(err);
     callback(response.E05);
   })
+  }
+  catch(err){
+    console.error(err);
+    callback(response.E05);
+  }
 }
 const forgotpasswordinit = (state, callback) => {
   models.User.findOne({

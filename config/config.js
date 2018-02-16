@@ -8,8 +8,9 @@ module.exports = {
     mailer_password: process.env.MAILER_PASSWORD,
     forgotexpiry: 30.00, //mins
     resetdb: true,
-    redisURL: process.env.REDIS_URL,
-    loginTtl:10*60 //mins
+    redisURL: process.env.REDIS_URL || "redis://redis-15313.c9.us-east-1-2.ec2.cloud.redislabs.com:15313",
+    loginTtl:10.00*60.00, //mins
+    jwtKey: process.env.JWT_KEY || "secret"
   },
   test: {
     connection_url: process.env.DATABASE_URL,
@@ -21,7 +22,8 @@ module.exports = {
     forgotexpiry: 30.00, //mins
     resetdb: false,
     redisURL: process.env.REDIS_URL,
-    loginTtl:1*60 //mins
+    loginTtl:10.00*60.00,//mins
+    jwtKey: process.env.JWT_KEY
   },
   production: {
     connection_url: process.env.DATABASE_URL,
@@ -33,6 +35,7 @@ module.exports = {
     forgotexpiry: 30.00, //mins
     resetdb: false,
     redisURL: process.env.REDIS_URL,
-    loginTtl:10*60 //mins
+    loginTtl:10.00*60.00, //mins
+    jwtKey: process.env.JWT_KEY
   }
 };

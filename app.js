@@ -11,6 +11,7 @@ const sessionauth = require("./middlewares/sessionauth");
 var env = process.env.NODE_ENV || "development";
 var morgan = require("morgan");
 var config = require("./config/config.js")[env];
+const redis = require("./services/redis");
 const initmiddleware = () => {
   app.use(helmet());
   app.use(bodyParser.urlencoded({

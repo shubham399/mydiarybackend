@@ -25,7 +25,7 @@ module.exports = {
     redisURL: process.env.REDIS_URL,
     loginTtl:10.00*60.00,//mins
     jwtKey: process.env.JWT_KEY,
-    host:"http://uat.mydiaries.cf"
+    host:"http://uat.mydiaries.cf/"
   },
   production: {
     connection_url: process.env.DATABASE_URL,
@@ -39,6 +39,6 @@ module.exports = {
     redisURL: process.env.REDIS_URL,
     loginTtl:10.00*60.00, //mins
     jwtKey: process.env.JWT_KEY,
-    host:"http://api.mydiaries.cf"
+    host:"http://api.mydiaries.cf/"
   }
 };

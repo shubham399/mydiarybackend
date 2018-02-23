@@ -2,7 +2,7 @@ const redis = require("../services/redis");
 var jwt = require("jsonwebtoken");
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
-const response = require("../utils/constants").responses
+const response = require("../utils/constants").responses;
 module.exports = function(req, res, next) {
   const session = req.get("X-SESSION-KEY");
   try{
@@ -15,7 +15,7 @@ module.exports = function(req, res, next) {
       }
       else
       {
-        console.log("Error:"+err);
+        console.error("Erorr:"+err);
         res.send(response.E12);
       }
   });

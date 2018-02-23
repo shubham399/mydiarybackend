@@ -1,6 +1,6 @@
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
-const response = require("../utils/constants").responses
+const response = require("../utils/constants").responses;
 
 module.exports = function(req, res, next) {
   if (req.path == "/")

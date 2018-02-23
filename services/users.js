@@ -17,7 +17,7 @@ const senduserdetails = (req, callback) => {
     var val = jwt.verify(session,config.jwtKey);
     redis.get(val.session,(err, reply) => {
     if(reply == "true"){
-    val = helper.clean(val, ["id","session", "iat","exp", "rememberme"])
+    val = helper.clean(val, ["id","session", "iat","exp", "rememberme"]);
     var res = response.USER_DATA;
     res.data = val;
     callback(res);
@@ -43,11 +43,7 @@ const register = (state, callback) => {
     val.dataValues["rememberme"] = false;
     val.dataValues["session"]=val.dataValues.userkey;
     redis.set(val.dataValues.session,val.dataValues.id);
-    val.dataValues = helper.clean(val.dataValues, ["createdAt","id", "updatedAt", "password", "userkey", "token"])
-    redis.get(val.dataValues.session,(err,reply)=>{
-      console.log("USER_ID:"+reply);
-      console.log("SESSION_KEY"+val.dataValues.session)
-    })
+    val.dataValues = helper.clean(val.dataValues, ["createdAt","id", "updatedAt", "password", "userkey", "token"]);
     res.SESSION_KEY = jwt.sign(val.dataValues,config.jwtKey,{ expiresIn: config.loginTtl})
     callback(res)
   }).catch((err) => {
@@ -56,7 +52,7 @@ const register = (state, callback) => {
     else if (err.errors[0].path == "email")
       callback(response["E04"]);
     else
-      callback(response.E05)
+      callback(response.E05);
   })
 }
 
@@ -77,7 +73,7 @@ const login = (state, callback) => {
     if(state.rememberme)
     res.SESSION_KEY = jwt.sign(val.dataValues,config.jwtKey);
     else
-    res.SESSION_KEY = jwt.sign(val.dataValues,config.jwtKey,{ expiresIn: config.loginTtl})
+    res.SESSION_KEY = jwt.sign(val.dataValues,config.jwtKey,{ expiresIn: config.loginTtl});
     callback(res)
     }
     else
@@ -105,12 +101,12 @@ const logout = (sessionkey, callback) => {
 
     callback(response["LOGOUT"]);
   }).catch((err) => {
-    console.error(err);
+    console.error("Erorr:"+err);
     callback(response.E05);
   })
   }
   catch(err){
-    console.error(err);
+   console.error("Erorr:"+err);
     callback(response.E05);
   }
 }
@@ -136,14 +132,14 @@ const forgotpasswordinit = (state, callback) => {
       }).then((val) => {
         callback(response.INITIED)
       }).catch((err) => {
-        console.error(err);
+       console.error("Erorr:"+err);
         callback(response.E05)
       })
     } else {
       callback(response.E02)
     }
   }).catch((err) => {
-    console.error(err);
+   console.error("Erorr:"+err);
     callback(response.E02)
   })
 }
@@ -182,13 +178,13 @@ const forgotpassword = (state, callback) => {
           }
         }).then((val) => {
           callback(response["CHANGE_SUCCESS"]).catch((err) => {
-            console.error(err);
+           console.error("Erorr:"+err);
             callback(response.E05)
           })
         })
       }
     }).catch((err) => {
-      console.error(err);
+     console.error("Erorr:"+err);
       callback(response["E08"]);
     });
   } else {

@@ -38,7 +38,9 @@ const startserver = () => {
 
 models.sequelize.sync({
   force: config.resetdb
-});
+}).then(()=>{
 initmiddleware();
 initroutes();
-startserver();
+startserver();  
+});
+

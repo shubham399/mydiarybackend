@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, Sequelize) => {
   var User = sequelize.define("User", {
     id: {

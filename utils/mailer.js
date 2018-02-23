@@ -21,8 +21,8 @@ const sendmail = (to, subject, message) => {
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.log("Erorr:")
-      return console.log(error);
+      console.log("Erorr:"+error)
+      return 1;
     }
     console.log("Message sent: %s", info.messageId);
   });

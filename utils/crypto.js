@@ -1,8 +1,9 @@
 const crypto = require("crypto");
-
+const env = process.env.NODE_ENV || "development";
+const salt = require("../config/config")[env].salt
 const gethash = (message) => {
   const hash = crypto.createHash("sha256");
-  return hash.update(message).digest("base64");
+  return hash.update(message+"|"+salt).digest("base64");
 }
 
 const encrypt = (message, secret) => {

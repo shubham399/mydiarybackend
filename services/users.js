@@ -170,7 +170,7 @@ const forgotpassword = (state, callback) => {
         callback(response["E10"]);
       } else {
         models.User.update({
-          password: crypto.gethash(state.password+"|"+id),
+          password: crypto.gethash(state.password+"|"+val.id),
           token: null
         }, {
           where: {

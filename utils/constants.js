@@ -68,6 +68,16 @@ const responses = {
     "status": "FAILURE",
     "message": "LOGIN TO PERFORM THIS ACTION"
   },
+  "E12":{
+        "error": true,
+        "status": "FAILURE",
+        "message": "Invalid SESSION KEY"
+      },
+  "E13":{
+        "error": true,
+        "status": "FAILURE",
+        "message": "Invalid API KEY"
+      },
   "EC": {
     error: true,
     "status": "FAILURE",

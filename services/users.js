@@ -16,7 +16,7 @@ const senduserdetails = (req, callback) => {
   try{
     var val = jwt.verify(session,config.jwtKey);
     redis.get(val.session,(err, reply) => {
-    if(reply == "true"){
+    if(reply){
     val = helper.clean(val, ["id","session", "iat","exp", "rememberme"]);
     var res = response.USER_DATA;
     res.data = val;

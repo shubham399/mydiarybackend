@@ -54,6 +54,7 @@ const enable = (req,callback) =>{
 }
 const disable = (req,callback) => {
    const userID = req.body.UserId;
+    
    models.User.update({totpsecret:null,isotpenabled:false},{where:{id:userID}})
   .then((val)=>{
      console.log(val);
@@ -65,10 +66,24 @@ const disable = (req,callback) => {
    })
 }
 const verify = (req,callback) =>{
-  const sessionval = req.body.Session;
   const session = req.get("X-SESSION-KEY");
-  redis.get(sessionval+"_totpsecret",(err,reply)=>{
-    callback("Verify Working");
+  const res = constants.LOGIN;
+  var val = jwt.verify(session,config.jwtKey);
+  console.log(JSON.stringify(val,true));
+  redis.get(val.session+"_totpsecret",(err,reply)=>{
+    console.log("REDIS:"+reply);
+    console.error("Error:"+err);
+    if(reply !=null){
+      val.is2faverifed = true;
+      res.SESSION_KEY = jwt.sign(val,config.jwtKey);
+      if(val.rememberme !== undefined && val.rememberme)
+        {
+          res.SESSION_KEY = jwt.sign(val,config.jwtKey,{ expiresIn: config.loginTtl});
+        }
+      callback(res);
+    }else{
+      callback(response.E01);
+    }
   })
 }
 

@@ -30,22 +30,26 @@ const enable = (req,callback) =>{
     if(reply!=null)
       {
         console.log(req.body.token);
-        redis.set(userID+"_totpsecret",null);
+//         redis.set(userID+"_totpsecret","null");
         if(totp.verify(reply,req.body.token)){
+            console.log("VERIFY PASSED");
            models.User.update({totpsecret:reply,isotpenabled:true},{where:{id:userID}})
              .then((val)=>{
              console.log(val);
-             callback({error:false,status:"SUCCESS",message:"2FA Enabled"})
-             return;
+             callback({error:false,status:"SUCCESS",message:"2FA Enabled"});
            })
              .catch((err)=>{
+             console.error("Error:"+err);
              callback(constants.E08);
-             return;
            });
         }
+        else
+           callback(constants.E08);
       }
-      console.log(JSON.stringify(err));
-      callback(constants.E14) 
+    else{
+      callback(constants.E14);
+    }
+    
   })
 }
 const disable = (req,callback) => {
@@ -64,12 +68,12 @@ const verify = (req,callback) =>{
   const sessionval = req.body.Session;
   const session = req.get("X-SESSION-KEY");
   redis.get(sessionval+"_totpsecret",(err,reply)=>{
-    
+    callback("Verify Working");
   })
 }
 
 
 exports.genrate = genrate;
-// exports.verify = verify;
+exports.verify = verify;
 exports.enable = enable;
 exports.disable = disable;

@@ -8,6 +8,8 @@ module.exports = function(req, res, next) {
   try{
     var val = jwt.verify(session,config.jwtKey);
     console.log("SESSION AUTH:"+JSON.stringify(val));
+    console.log(req.originalUrl)
+    if((val.isotpenabled && req.originalUrl == "/users/otp/verify") ||(val.isotpenabled && val.is2faverifed) || !val.isotpenabled)
     redis.get(val.session,(err, reply) => {
     if(reply){
       req.body["UserId"] = reply;
@@ -20,6 +22,9 @@ module.exports = function(req, res, next) {
         res.send(response.E12);
       }
   });
+   else{
+    res.send(response.E12);  
+   }
     }
  catch(err){
    console.log("Error:"+err);

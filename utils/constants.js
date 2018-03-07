@@ -78,6 +78,11 @@ const responses = {
         "status": "FAILURE",
         "message": "Invalid API KEY"
       },
+    "E14":{
+        "error": true,
+        "status": "FAILURE",
+        "message": "UNABLE TO ENABLE/DISBALE 2FA"
+      },
   "EC": {
     error: true,
     "status": "FAILURE",

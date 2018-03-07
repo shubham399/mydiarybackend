@@ -17,7 +17,7 @@ const senduserdetails = (req, callback) => {
     var val = jwt.verify(session,config.jwtKey);
     redis.get(val.session,(err, reply) => {
     if(reply){
-    val = helper.clean(val, ["id","session", "iat","exp", "rememberme"]);
+    val = helper.clean(val, ["id","totpsecret","session", "iat","exp", "rememberme"]);
     var res = response.USER_DATA;
     res.data = val;
     callback(res);
@@ -43,7 +43,7 @@ const register = (state, callback) => {
     val.dataValues["rememberme"] = false;
     val.dataValues["session"]=val.dataValues.userkey;
     redis.set(val.dataValues.session,val.dataValues.id);
-    val.dataValues = helper.clean(val.dataValues, ["createdAt","id", "updatedAt", "password", "userkey", "token"]);
+    val.dataValues = helper.clean(val.dataValues, ["createdAt","id","totpsecret", "updatedAt", "password", "userkey", "token"]);
     res.SESSION_KEY = jwt.sign(val.dataValues,config.jwtKey,{ expiresIn: config.loginTtl})
     callback(res)
   }).catch((err) => {
@@ -69,7 +69,9 @@ const login = (state, callback) => {
     val.dataValues["rememberme"]= state.rememberme;
     val.dataValues["session"]=val.dataValues.userkey;
     redis.set(val.dataValues.session,val.dataValues.id);
-    val.dataValues = helper.clean(val.dataValues, ["createdAt","id", "updatedAt", "password", "userkey", "token"]);
+     if(val.dataValues.isotpenabled)
+    redis.set(val.dataValues.session+"_totpsecret",val.dataValues.totpsecret);
+    val.dataValues = helper.clean(val.dataValues, ["createdAt","id","totpsecret", "updatedAt", "password", "userkey", "token"]);
     if(state.rememberme)
     res.SESSION_KEY = jwt.sign(val.dataValues,config.jwtKey);
     else

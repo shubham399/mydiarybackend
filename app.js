@@ -21,6 +21,7 @@ const initmiddleware = () => {
   app.use(validator());
   app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
+  app.use("/users/otp", sessionauth);
   app.use(morgan(`:remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]`));
 }
 
@@ -37,7 +38,7 @@ const startserver = () => {
 }
 
 models.sequelize.sync({
-  force: config.resetdb
+  force: false//config.resetdb
 }).then(()=>{
 initmiddleware();
 initroutes();

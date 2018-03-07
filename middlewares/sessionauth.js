@@ -11,6 +11,7 @@ module.exports = function(req, res, next) {
     redis.get(val.session,(err, reply) => {
     if(reply){
       req.body["UserId"] = reply;
+      req.body["session"] = val.session; 
       next();
       }
       else

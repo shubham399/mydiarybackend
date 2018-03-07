@@ -12,6 +12,7 @@ const get = function(key, cb) {
 const clean = () =>{
   client.end(true);
 }
+
 exports.redis = client;
 exports.set = set;
 exports.get = get;

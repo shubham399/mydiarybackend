@@ -24,6 +24,14 @@ module.exports = (sequelize, Sequelize) => {
     token: {
       type: Sequelize.STRING,
       defaultValue: null
+    },
+     totpsecret: {
+      type: Sequelize.STRING,
+      defaultValue: null
+    },
+    isotpenabled:{
+        type: Sequelize.BOOLEAN,
+      defaultValue: null
     }
   });
   User.associate = function(models) {

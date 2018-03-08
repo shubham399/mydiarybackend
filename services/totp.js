@@ -18,7 +18,7 @@ const genrate = (req,callback) =>{
   console.log(data.otpauthUrl);
   var dataurl = totp.toDataUrl(data.otpauthUrl)
   console.log(dataurl);
-  redis.set(userID+"_totpsecret",data.secret);
+  redis.setex(userID+"_totpsecret",data.secret,2*60);
   if(env != "production")
   callback({error:false,dataurl:dataurl,secret:data.secret});
   else

@@ -1,0 +1,35 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    # volumes:
+    #   - "./pgdata:/var/lib/postgresql/data"
+    environment:
+       POSTGRES_PASSWORD: postgres
+       POSTGRES_USER: postgres
+       POSTGRES_DB:  mydiary
+    networks:
+      - webnet
+  web:
+    build: .
+    ports:
+     - "8080:8080"
+    networks:
+      - webnet
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db/mydiary
+      JWT_KEY: 13b7654d-fd16-488b-9e25-2113f478ccbf
+      COMMON_SALT : 13b7654d-fd16-488b-9e25-2113f478ccbf
+      NODE_ENV : test
+      REDIS_URL : redis://redis:6379
+      MAILER_PASSWORD : testing
+    depends_on:
+      - "redis"
+      - "db"
+  redis:
+    image: "redis"
+    networks:
+      - webnet
+networks:
+  webnet:

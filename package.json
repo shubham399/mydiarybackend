@@ -26,6 +26,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
+    "cluster": "^0.7.7",
     "express": "^4.16.2",
     "express-validator": "^4.3.0",
     "fs": "0.0.1-security",
@@ -38,8 +39,10 @@
     "path": "^0.12.7",
     "pg": "^6.4.2",
     "pg-hstore": "^2.3.2",
+    "qr-image": "^3.2.0",
     "redis": "^2.8.0",
     "sequelize": "^4.28.6",
+    "speakeasy": "^2.0.0",
     "uuid": "^3.1.0"
   }
 }

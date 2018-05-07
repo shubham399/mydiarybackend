@@ -9,6 +9,8 @@ router.get("/", function(req, res) {
     res.send(val);
   })
 })
+router.use('/otp', require('./totp'));
+
 
 router.post("/register", function(req, res) {
   const uservalid = validate(req.body.username, /^[a-z][a-z0-9]+$/i, 4);

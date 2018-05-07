@@ -9,9 +9,9 @@ module.exports = {
     forgotexpiry: 30.00, //mins
     resetdb: true,
     redisURL: process.env.REDIS_URL || "redis://redis-15313.c9.us-east-1-2.ec2.cloud.redislabs.com:15313",
-    loginTtl:10.00*60.00, //mins
+    loginTtl: 10.00 * 60.00, //mins
     jwtKey: process.env.JWT_KEY || "secret",
-    salt:process.env.COMMON_SALT || "13b7654d-fd16-488b-9e25-2113f478ccbf"
+    salt: process.env.COMMON_SALT || "13b7654d-fd16-488b-9e25-2113f478ccbf"
   },
   test: {
     connection_url: process.env.DATABASE_URL,
@@ -23,9 +23,9 @@ module.exports = {
     forgotexpiry: 30.00, //mins
     resetdb: false,
     redisURL: process.env.REDIS_URL,
-    loginTtl:10.00*60.00,//mins
+    loginTtl: 10.00 * 60.00, //mins
     jwtKey: process.env.JWT_KEY,
-    salt:process.env.COMMON_SALT
+    salt: process.env.COMMON_SALT
   },
   production: {
     connection_url: process.env.DATABASE_URL,
@@ -37,8 +37,8 @@ module.exports = {
     forgotexpiry: 30.00, //mins
     resetdb: false,
     redisURL: process.env.REDIS_URL,
-    loginTtl:10.00*60.00, //mins
+    loginTtl: 10.00 * 60.00, //mins
     jwtKey: process.env.JWT_KEY,
-    salt:process.env.COMMON_SALT
+    salt: process.env.COMMON_SALT
   }
 };

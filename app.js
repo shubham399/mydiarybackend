@@ -61,6 +61,9 @@ if (cluster.isMaster) {
   app.all('/pid', function(req, res) {
     res.send('process ' + process.pid + ' says hello!').end();
   }) //can be removed
+  app.all('/ping',function(req,res){
+    res.send('PONG!').end();
+  });
   models.sequelize.sync({
     force: config.resetdb
   }).then(() => {

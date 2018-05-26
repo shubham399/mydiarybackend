@@ -67,7 +67,7 @@ if (cluster.isMaster) {
     if(header === actualkey)
     res.send('PONG!').end();
     else
-      res.status(410).send("GO AWAY!).end();
+      res.status(410).send("GO AWAY!").end();
   });
   models.sequelize.sync({
     force: config.resetdb

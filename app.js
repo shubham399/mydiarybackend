@@ -62,7 +62,12 @@ if (cluster.isMaster) {
     res.send('process ' + process.pid + ' says hello!').end();
   }) //can be removed
   app.all('/ping',function(req,res){
+    const header = req.get("X-PINGDOM-KEY");
+    const actualkey = process.env.PINGKEY;
+    if(header === actualkey)
     res.send('PONG!').end();
+    else
+      res.status(410).send("GO AWAY!).end();
   });
   models.sequelize.sync({
     force: config.resetdb

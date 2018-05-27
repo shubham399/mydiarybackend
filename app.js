@@ -14,6 +14,8 @@ var morgan = require("morgan");
 var config = require("./config/config.js")[env];
 const redis = require("./services/redis");
 const initmiddleware = () => {
+  
+  app.use(morgan('dev'))
   app.use(helmet());
   app.use(bodyParser.urlencoded({
     extended: true
@@ -23,8 +25,6 @@ const initmiddleware = () => {
   app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
   app.use("/users/otp", sessionauth);
-  app.use(morgan(`:remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]`));
-}
 
 const initroutes = () => {
   app.get("/", function(req, res) {

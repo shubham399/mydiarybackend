@@ -25,6 +25,7 @@ const initmiddleware = () => {
   app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
   app.use("/users/otp", sessionauth);
+}
 
 const initroutes = () => {
   app.get("/", function(req, res) {

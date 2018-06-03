@@ -41,7 +41,7 @@ const startserver = () => {
 }
 
 if (cluster.isMaster) {
-  var numWorkers = require('os').cpus().length;
+  var numWorkers =3//require('os').cpus().length;
 
   console.log('Master cluster setting up ' + numWorkers + ' workers...');
 

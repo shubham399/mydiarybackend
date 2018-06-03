@@ -1,4 +1,4 @@
-require('newrelic');
+//require('newrelic');
 var express = require("express");
 const app = express();
 var cluster = require('cluster');

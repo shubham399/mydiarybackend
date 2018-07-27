@@ -1,7 +1,7 @@
 var supertest = require("supertest");
 var should = require("should");
 var env = process.env.NODE_ENV || "development"
-var host = "https://uat.mydiaries.cf";
+var host = "uat.mydiaries.cf:443";
 var port =  443
 
 var server = supertest.agent(host);

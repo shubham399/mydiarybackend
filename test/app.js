@@ -1,7 +1,7 @@
 var supertest = require("supertest");
 var should = require("should");
 var env = process.env.NODE_ENV || "development"
-var host = require("../config/config")[env].host;
+var host = "localhost";
 var port = process.env.PORT || 80
 
 var server = supertest.agent(host+":"+port);

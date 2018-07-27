@@ -68,6 +68,21 @@ const responses = {
     "status": "FAILURE",
     "message": "LOGIN TO PERFORM THIS ACTION"
   },
+  "E12":{
+        "error": true,
+        "status": "FAILURE",
+        "message": "Invalid SESSION KEY"
+      },
+  "E13":{
+        "error": true,
+        "status": "FAILURE",
+        "message": "Invalid API KEY"
+      },
+    "E14":{
+        "error": true,
+        "status": "FAILURE",
+        "message": "UNABLE TO ENABLE/DISBALE 2FA"
+      },
   "EC": {
     error: true,
     "status": "FAILURE",

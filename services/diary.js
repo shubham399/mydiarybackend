@@ -14,6 +14,7 @@ const addrecord = (state, callback) => {
       }
     })
   }).catch((err) => {
+    console.error("Erorr:"+err);
     callback(response.E05);
   })
 }
@@ -37,6 +38,7 @@ const deleterecord = (state, callback) => {
         "message": "Data Not Found"
       })
   }).catch((err) => {
+    console.error("Erorr:"+err);
     callback(response.E05);
   })
 }
@@ -64,6 +66,7 @@ const updaterecord = (value, callback) => {
         "message": "Data Not Found"
       })
   }).catch((err) => {
+    console.error("Erorr:"+err);
     callback(response.E05);
   })
 }
@@ -85,6 +88,7 @@ const getall = (state, callback) => {
       "data": val
     });
   }).catch((err) => {
+    console.error("Erorr:"+err);
     callback(response.E05);
   })
 }
@@ -109,6 +113,7 @@ const getone = (state, callback) => {
       "data": val
     });
   }).catch((err) => {
+     console.error("Erorr:"+err);
     callback(response.E05);
   })
 }

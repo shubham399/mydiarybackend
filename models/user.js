@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, Sequelize) => {
   var User = sequelize.define("User", {
     id: {
@@ -23,6 +23,14 @@ module.exports = (sequelize, Sequelize) => {
     },
     token: {
       type: Sequelize.STRING,
+      defaultValue: null
+    },
+     totpsecret: {
+      type: Sequelize.STRING,
+      defaultValue: null
+    },
+    isotpenabled:{
+        type: Sequelize.BOOLEAN,
       defaultValue: null
     }
   });

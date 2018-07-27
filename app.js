@@ -1,5 +1,6 @@
 var express = require("express");
 const app = express();
+var cluster = require('cluster');
 const bodyParser = require("body-parser");
 const diaryRouter = require("./routes/diary");
 const userRouter = require("./routes/user");
@@ -21,6 +22,7 @@ const initmiddleware = () => {
   app.use(validator());
   app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
+  app.use("/users/otp", sessionauth);
   app.use(morgan(`:remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]`));
 }
 
@@ -36,9 +38,42 @@ const startserver = () => {
   app.listen(process.env.PORT, () => console.log("Server Started at " + process.env.PORT));
 }
 
-models.sequelize.sync({
-  force: config.resetdb
-});
-initmiddleware();
-initroutes();
-startserver();
+if (cluster.isMaster) {
+  var numWorkers = require('os').cpus().length;
+
+  console.log('Master cluster setting up ' + numWorkers + ' workers...');
+
+  for (var i = 0; i < numWorkers; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('online', function(worker) {
+    console.log('Worker ' + worker.process.pid + ' is online');
+  });
+
+  cluster.on('exit', function(worker, code, signal) {
+    console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
+    console.log('Starting a new worker');
+    cluster.fork();
+  });
+} else {
+
+  app.all('/pid', function(req, res) {
+    res.send('process ' + process.pid + ' says hello!').end();
+  }) //can be removed
+  app.all('/ping',function(req,res){
+    const header = req.get("X-PING-KEY");
+    const actualkey = process.env.PINGKEY;
+    if(header === actualkey)
+    res.send('PONG!').end();
+    else
+      res.status(418).send("GO AWAY!").end();
+  });
+  models.sequelize.sync({
+    force: config.resetdb
+  }).then(() => {
+    initmiddleware();
+    initroutes();
+    startserver();
+  });
+}

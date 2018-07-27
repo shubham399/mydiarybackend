@@ -68,6 +68,7 @@ const login = (state, callback) => {
     if(state.password === val.dataValues.password){
     val.dataValues["rememberme"]= state.rememberme;
     val.dataValues["session"]=val.dataValues.userkey;
+    res.is2FAEnable = val.dataValues["isotpenabled"];
     redis.set(val.dataValues.session,val.dataValues.id);
      if(val.dataValues.isotpenabled)
     redis.set(val.dataValues.session+"_totpsecret",val.dataValues.totpsecret);

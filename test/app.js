@@ -4,7 +4,7 @@ var env = process.env.NODE_ENV || "development"
 var host = "https://uat.mydiaries.cf";
 var port =  443
 
-var server = supertest.agent(host+":"+port);
+var server = supertest.agent(host);
 
 describe("Test if Server is UP",function(){
    it("checking correct input",function(done){

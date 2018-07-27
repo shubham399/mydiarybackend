@@ -6,7 +6,7 @@ var port =  443
 
 var server = supertest.agent(host);
 
-describe("Test if Server is UP",function(){
+describe("Test if "+host+" is UP",function(){
    it("checking correct input",function(done){
     server
     .get('/')

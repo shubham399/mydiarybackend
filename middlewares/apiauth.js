@@ -10,6 +10,6 @@ module.exports = function(req, res, next) {
     if (api == config.api_key)
       next()
     else
-      res.send(response.E13);
+      res.status(401).send(response.E13);
   }
 }

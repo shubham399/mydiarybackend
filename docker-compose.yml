@@ -24,6 +24,7 @@ services:
       NODE_ENV : test
       REDIS_URL : redis://redis:6379
       MAILER_PASSWORD : testing
+      PORT: 8080
     depends_on:
       - "redis"
       - "db"

@@ -3,9 +3,9 @@
 
 
 UAT LINK: https://mydiary-uat.herokuapp.com/
-          http://uat.mydiaries.cf/
+          https://uat.mydiaries.cf/
     
- PROD : http://diary.shubhkumar.in
+ PROD : https://diary.shubhkumar.in
 
 ## Routes
  1. / - Up route

@@ -15,7 +15,7 @@ var morgan = require("morgan");
 var config = require("./config/config.js")[env];
 const redis = require("./services/redis");
 const initmiddleware = () => {
-  
+const cors = require("cors")
   app.use(morgan('dev'))
   app.use(helmet());
   app.use(bodyParser.urlencoded({
@@ -23,11 +23,7 @@ const initmiddleware = () => {
   }));
   app.use(bodyParser.json());
   app.use(validator());
-  app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,X-SESSION-KEY");
-  next();
-});
+  app.use(cors())
   //app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
   app.use("/users/otp", sessionauth);

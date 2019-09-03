@@ -22,7 +22,7 @@ const initmiddleware = () => {
   app.use(validator());
   app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,X-SESSION-KEY");
   next();
 });
   //app.use(apiauthMiddleware);

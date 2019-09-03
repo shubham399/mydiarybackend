@@ -15,7 +15,7 @@ var morgan = require("morgan");
 var config = require("./config/config.js")[env];
 const redis = require("./services/redis");
 const initmiddleware = () => {
-const cors = require("cors")
+  const cors = require("cors")
   app.use(morgan('dev'))
   app.use(helmet());
   app.use(bodyParser.urlencoded({
@@ -23,7 +23,11 @@ const cors = require("cors")
   }));
   app.use(bodyParser.json());
   app.use(validator());
-  app.use(cors())
+  var corsOptions = {
+    origin: "https://diary.shubhkumar.in",
+    optionsSuccessStatus: 200
+  }
+  app.use(cors(corsOptions))
   //app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
   app.use("/users/otp", sessionauth);
@@ -42,7 +46,7 @@ const startserver = () => {
 }
 
 if (cluster.isMaster) {
-  var numWorkers =3//require('os').cpus().length;
+  var numWorkers = 3 //require('os').cpus().length;
 
   console.log('Master cluster setting up ' + numWorkers + ' workers...');
 
@@ -64,11 +68,11 @@ if (cluster.isMaster) {
   app.all('/pid', function(req, res) {
     res.send('process ' + process.pid + ' says hello!').end();
   }) //can be removed
-  app.all('/ping',function(req,res){
+  app.all('/ping', function(req, res) {
     const header = req.get("X-PING-KEY");
     const actualkey = process.env.PINGKEY;
-    if(header === actualkey)
-    res.send('PONG!').end();
+    if (header === actualkey)
+      res.send('PONG!').end();
     else
       res.status(418).send("GO AWAY!").end();
   });

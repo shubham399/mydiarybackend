@@ -23,7 +23,12 @@ const initmiddleware = () => {
   }));
   app.use(bodyParser.json());
   app.use(validator());
-  app.use(apiauthMiddleware);
+  app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,X-SESSION-KEY");
+  next();
+});
+  //app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
   app.use("/users/otp", sessionauth);
 }

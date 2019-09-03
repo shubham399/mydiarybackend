@@ -20,6 +20,11 @@ const initmiddleware = () => {
   }));
   app.use(bodyParser.json());
   app.use(validator());
+  app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
   //app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
   app.use("/users/otp", sessionauth);

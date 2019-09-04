@@ -41,7 +41,7 @@ const initroutes = () => {
   app.use("/users", userRouter);
 }
 
-const startserver = () => {uat.mydiaries.cf
+const startserver = () => {
   app.listen(process.env.PORT, () => console.log("Server Started at " + process.env.PORT));
 }
 

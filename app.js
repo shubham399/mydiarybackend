@@ -27,7 +27,7 @@ const initmiddleware = () => {
     origin: "https://diary.shubhkumar.in",
     optionsSuccessStatus: 200
   }
-  app.use(cors(corsOptions))
+  app.use(cors())
   //app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
   app.use("/users/otp", sessionauth);
@@ -41,7 +41,7 @@ const initroutes = () => {
   app.use("/users", userRouter);
 }
 
-const startserver = () => {
+const startserver = () => {uat.mydiaries.cf
   app.listen(process.env.PORT, () => console.log("Server Started at " + process.env.PORT));
 }
 

@@ -23,10 +23,6 @@ const initmiddleware = () => {
   }));
   app.use(bodyParser.json());
   app.use(validator());
-  var corsOptions = {
-    origin: "https://diary.shubhkumar.in",
-    optionsSuccessStatus: 200
-  }
   app.use(cors())
   //app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
@@ -41,7 +37,7 @@ const initroutes = () => {
   app.use("/users", userRouter);
 }
 
-const startserver = () => {uat.mydiaries.cf
+const startserver = () => {
   app.listen(process.env.PORT, () => console.log("Server Started at " + process.env.PORT));
 }
 

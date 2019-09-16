@@ -6,6 +6,11 @@ router.get("/", function(req, res) {
     res.send(val);
   })
 });
+router.get("/ids", function(req, res) {
+  diary.getallIds(req.body, (val) => {
+    res.send(val);
+  })
+});
 
 router.get("/:id", function(req, res) {
   req.body["id"] = req.params.id;

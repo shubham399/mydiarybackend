@@ -92,6 +92,22 @@ const getall = (state, callback) => {
     callback(response.E05);
   })
 }
+const getallIds = (state, callback) => {
+  models.Diary.findAll({
+    where: {
+      UserId: state.UserId
+    }
+  }).then((val) => {
+    val = val.map(x => x.id)
+    callback({
+      "error": false,
+      "data": val
+    });
+  }).catch((err) => {
+    console.error("Erorr:"+err);
+    callback(response.E05);
+  })
+}
 
 const getone = (state, callback) => {
   models.Diary.findOne({
@@ -122,4 +138,5 @@ exports.addrecord = addrecord;
 exports.deleterecord = deleterecord;
 exports.updaterecord = updaterecord;
 exports.getall = getall;
+exports.getallIds = getallIds;
 exports.getone = getone;

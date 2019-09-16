@@ -23,10 +23,6 @@ const initmiddleware = () => {
   }));
   app.use(bodyParser.json());
   app.use(validator());
-  var corsOptions = {
-    origin: "https://diary.shubhkumar.in",
-    optionsSuccessStatus: 200
-  }
   app.use(cors())
   //app.use(apiauthMiddleware);
   app.use("/diary", sessionauth);
